@@ -27,6 +27,18 @@ public class Serial {
         }
     }
 
+    /*
+    Method to set values in an array to the median of the
+    */
+    public void filterNoise(int filter){
+        this.filter = filter;
+        this.ends = filter - ((filter/2) + 1); //Gets the border lengths i.e length from centre to end of array of filter size
+        //eg filter size of 5 will give a segment {1,2,3,4,5} the ends = 2 as length between centre and end is 2
+
+        for (int i = ends; i < noise.length - ends; i++){
+            noise[i] = getMiddle(i);
+        }
+    }
 
 
 
