@@ -9,6 +9,10 @@ public class Main {
 
     //Test array of what input text files would produce
     public static int[] testAry = {5,12,80,91,5,4,60,500,800,8,7,45,65,2,12,54,6,8,98,97,64,6,12,35,43,79,46,116,1};
+    static final ForkJoinPool fjPool = new ForkJoinPool();
+    static int[] sumArray(int[] array,int i){
+        return fjPool.invoke(new TestThread(testAry,i));
+    }
 
     public static void main(String[] args) throws InterruptedException{
         //TestThread ts = new TestThread(5,6,8,1);
@@ -19,36 +23,29 @@ public class Main {
 
         //System.out.println(ts.ans);
         for (int i = 0; i <  testAry.length -2 ; i++){
-            (new TestThread(testAry[i] , testAry[i+1] , testAry[i+2] ,i)).start();
+            sumArray(testAry,i);
         }
 
     }
 }
 
 //To test threading
-class TestThread extends Thread {
+class TestThread extends  RecursiveTask<int[]>{
     //Instance var to store object properties
-    public int x;
-    public int y;
     public int threadNum;
-    public int z;
     public int[] splitAry;
 
     //Constructor method to set object variables
-    TestThread(int x,int y,int z,int i){
-
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        int[] spltArray = {x,z,y};
-        this.splitAry = spltArray;
+    TestThread(int[] arry,int i){
+        this.splitAry = arry;
         this.threadNum = i;
     }
 
     //Thread method that will run when thread initialised
-    public void run(){
+    public int[] compute(){
         Arrays.sort(splitAry);
         System.out.println("Thread " + threadNum + " Median is: " + splitAry[splitAry.length/2]);
+        return null;
     }
 
 }
