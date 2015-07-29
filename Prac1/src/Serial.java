@@ -22,8 +22,15 @@ public class Serial {
     public static void main(String[] args) {
         Serial sr1 = new Serial(testAry);
         sr1.filterNoise(filterTest);
-        for (int j = 0; j <sr1.noise.length; j++){
-            System.out.print(sr1.noise[j] + " ");
+        sr1.printNoise();
+    }
+
+    /*
+        Method to print array for comparison
+     */
+    public void printNoise(){
+        for (int j = 0; j <noise.length; j++){
+            System.out.print(noise[j] + " ");
         }
     }
 
@@ -39,8 +46,6 @@ public class Serial {
             noise[i] = getMiddle(i);
         }
     }
-
-
 
     /*
         Method to get the median of a segment of an array at the index i
