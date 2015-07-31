@@ -3,6 +3,7 @@ package src;
 import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
 
 import javax.print.attribute.IntegerSyntax;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,9 +26,20 @@ public class RecursiveThread {
         return fjPool.invoke(new FilterNoise(array,0,array.length,filter,ends));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
+        String workingDir = System.getProperty("user.dir");
+
+        double[] txt4 = FileUtil.getNoise(workingDir + "\\src\\TxtFiles\\inp4.txt");
+        long time1 = System.currentTimeMillis();
+        System.out.println();
+        System.out.println("Inp4.txt - Start:");
+        double[] filtered1 = filterArray(txt4,3);
+        long time2 = System.currentTimeMillis();
+        System.out.println("Done: " + (time2-time1));
+        System.out.println();
+
         System.out.println(dateFormat.format(date));
         double[] filteredArray = filterArray(testAry,3);
         System.out.println(dateFormat.format(date));
