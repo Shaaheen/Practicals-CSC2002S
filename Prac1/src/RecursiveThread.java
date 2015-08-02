@@ -4,6 +4,7 @@ import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
 
 import javax.print.attribute.IntegerSyntax;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,40 +22,48 @@ public class RecursiveThread {
     public static double[] testAry = {5,12,80,91,5,4,60,500,800,8,7,45,65,2,12,54,6,8,98,97,64,6,12,35,43,79,46,116,1};
 
     static final ForkJoinPool fjPool = new ForkJoinPool();
-    static double[] filterArray(double[] array,int filter) {
+    public static double[] filterArray(double[] array,int filter) {
         int ends = filter - ((filter/2) + 1); //Gets the border lengths i.e length from centre to end of array of filter size
+        if (filter > array.length){
+            return array;
+        }
         return fjPool.invoke(new FilterNoise(array,0,array.length,filter,ends));
     }
 
     public static void main(String[] args) throws IOException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
+        PrintStream stream = new PrintStream("times.csv");
         String workingDir = System.getProperty("user.dir");
 
         double[] txt4 = FileUtil.getNoise(workingDir + "\\src\\TxtFiles\\inp4.txt");
-        long time1 = System.currentTimeMillis();
+        long time1 = System.nanoTime();
         System.out.println();
         System.out.println("Inp4.txt - Start:");
-        double[] filtered1 = filterArray(txt4,3);
-        long time2 = System.currentTimeMillis();
-        System.out.println("Done: " + (time2-time1));
+        double[] filtered1 = filterArray(txt4,21);
+        long time2 = System.nanoTime();
+        System.out.println("Done: " + ((time2-time1 + 0.0)/1000000000) + " seconds");
         System.out.println();
 
-        System.out.println(dateFormat.format(date));
-        double[] filteredArray = filterArray(testAry,3);
-        System.out.println(dateFormat.format(date));
-        for (double j:testAry ){
-            System.out.print(j + " ");
+        String csvTest = markDownTimes(txt4,21,40);
+        stream.println(csvTest);
+
+    }
+
+    public static String markDownTimes(double[] array,int filter,int repeat){
+        String exportString = "Times for Filter :," + filter + ",Array:," + "" + "\r\n" + "\r\n";
+        exportString = exportString + "Trials , Times " + "\r\n";
+        long time1,time2;
+        for (int i = 0; i < repeat ; i++){
+            time1 = System.nanoTime();
+            filterArray(array, filter);
+            time2 = System.nanoTime();
+            exportString = exportString + i + "," + ( (time2-time1 + 0.0) / 1000000000) + "\r\n";
         }
-        System.out.println();
-        for (double i:filteredArray ){
-            System.out.print(i + " ");
-        }
+        return exportString;
     }
 }
 
 class FilterNoise extends RecursiveTask<double[]> {
-    static int SEQUENTIAL_THRESHOLD = 6;
+    static int SEQUENTIAL_THRESHOLD = 10000;
     int lo;
     int hi;
     double[] arr;
@@ -71,7 +80,11 @@ class FilterNoise extends RecursiveTask<double[]> {
 
     public double[] compute() {
         if(hi - lo <= SEQUENTIAL_THRESHOLD) {
-            if (lo == 0){
+            if ( lo == 0 && hi == arr.length){
+                Serial filtered = new Serial(arr);
+                return filtered.filterNoise(filter);
+            }
+            else if (lo == 0){
                 Serial filtered = new Serial(Arrays.copyOfRange(arr , lo, hi + ends));
                 double[] noiseFiltered = filtered.filterNoise(filter);
                 return Arrays.copyOfRange(noiseFiltered,0,noiseFiltered.length - ends);
