@@ -37,9 +37,9 @@ public class Serial {
         this.theFilteredNoise = new double[noise.length];
     }
 
-    public double serialNoiseFilter(){
+    public double serialNoiseFilter(boolean median){
         long time1 = System.nanoTime();
-        double[] filtered1 = filterNoise(filter);
+        double[] filtered1 = filterNoise(filter,median);
         long time2 = System.nanoTime();
         return (time2-time1 + 0.0)/1000000000;
     }
@@ -50,7 +50,7 @@ public class Serial {
         long time1,time2;
         for (int i = 0; i < repeat ; i++){
             time1 = System.nanoTime();
-            double[] filtered1 = filterNoise(filter);
+            double[] filtered1 = filterNoise(filter,true);
             time2 = System.nanoTime();
             exportString = exportString + i + "," + ( (time2-time1 + 0.0) / 1000000000) + "\r\n";
         }
@@ -69,7 +69,7 @@ public class Serial {
     /*
     Method to set values in an array to the median of the
     */
-    public double[] filterNoise(int filter){
+    public double[] filterNoise(int filter,boolean median){
         if (filter > noise.length){
             return noise;
         }
@@ -83,7 +83,12 @@ public class Serial {
                 theFilteredNoise[i] = noise[i];
             }
             else{
-                theFilteredNoise[i] = getMiddle(i);
+                if (median){
+                    theFilteredNoise[i] = getMiddle(i);
+                }
+                else{
+                    theFilteredNoise[i] = getMean(i);
+                }
             }
 
         }
@@ -97,5 +102,14 @@ public class Serial {
         double[] tempArray = Arrays.copyOfRange(noise , i - ends , i + ends + 1 );
         Arrays.sort(tempArray);
         return tempArray[tempArray.length/2];
+    }
+
+    public double getMean(int i){
+        double[] tempArray = Arrays.copyOfRange(noise,i - ends, i + ends + 1);
+        double mean = 0.0;
+        for (double j:tempArray){
+            mean += j;
+        }
+        return mean/tempArray.length;
     }
 }

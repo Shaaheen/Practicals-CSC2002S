@@ -27,12 +27,12 @@ public class RecursiveThread {
     static final ForkJoinPool fjPool = new ForkJoinPool();
 
     //Main filter array method that calls the threaded forkjoin class
-    public static double[] filterArray(double[] array,int filter) {
+    public static double[] filterArray(double[] array,int filter,boolean median) {
         int ends = filter - ((filter/2) + 1); //Gets the border lengths i.e length from centre to end of array of filter size
         if (filter > array.length){
             return array;
         }
-        return fjPool.invoke(new FilterNoise(array,0,array.length,filter,ends));
+        return fjPool.invoke(new FilterNoise(array,0,array.length,filter,ends,median));
     }
 
     //Constructor to set array and filter
@@ -42,9 +42,9 @@ public class RecursiveThread {
     }
 
     //returns the time taken to filter the noise given
-    public double parallelNoiseFilter(){
+    public double parallelNoiseFilter(boolean median){
         long time1 = System.nanoTime();
-        double[] filtered1 = filterArray(noiseAry,filter);
+        double[] filtered1 = filterArray(noiseAry,filter,median);
         long time2 = System.nanoTime();
         return (time2-time1 + 0.0)/1000000000;
     }
@@ -58,7 +58,7 @@ public class RecursiveThread {
         long time1,time2;
         for (int i = 0; i < repeat ; i++){
             time1 = System.nanoTime();
-            filterArray(noiseAry, filter);
+            filterArray(noiseAry, filter,true);
             time2 = System.nanoTime();
             exportString = exportString + i + "," + ( (time2-time1 + 0.0) / 1000000000) + "\r\n";
         }
@@ -76,14 +76,16 @@ class FilterNoise extends RecursiveTask<double[]> {
     double[] arr;
     int ends ;
     int filter;
+    boolean median;
 
     //Constructor method of a thread
-    FilterNoise(double[] a, int l, int h,int fil,int end) {
+    FilterNoise(double[] a, int l, int h,int fil,int end,boolean median) {
         lo=l;
         hi=h;
         arr=a;
         this.filter = fil;
         this.ends = end;
+        this.median = median;
     }
 
     //Method run when thread is created
@@ -94,34 +96,41 @@ class FilterNoise extends RecursiveTask<double[]> {
             //If whole noise is smaller than cut off then just process sequentially
             if ( lo == 0 && hi == arr.length){
                 Serial filtered = new Serial(arr);
-                return filtered.filterNoise(filter);
+                return filtered.filterNoise(filter,median);
             }
             //if beginning of noise then join  from the beginning of array and leave borders
             else if (lo == 0){
                 Serial filtered = new Serial(Arrays.copyOfRange(arr , lo, hi + ends));
-                double[] noiseFiltered = filtered.filterNoise(filter);
+                double[] noiseFiltered = filtered.filterNoise(filter,median);
                 return Arrays.copyOfRange(noiseFiltered,0,noiseFiltered.length - ends);
             }
             //if end of array then leave don't process the end of the array
             else if (hi==arr.length){
                 Serial filtered = new Serial(Arrays.copyOfRange(arr , lo - ends, hi));
-                double[] noiseFiltered = filtered.filterNoise(filter);
+                double[] noiseFiltered = filtered.filterNoise(filter,median);
                 return Arrays.copyOfRange(noiseFiltered,ends,noiseFiltered.length);
             }
             //else a middle segment of array then take extra length on both sides to process edges
             else{
                 Serial filtered = new Serial(Arrays.copyOfRange(arr , lo - ends, hi + ends));
-                double[] noiseFiltered = filtered.filterNoise(filter);
+                double[] noiseFiltered = filtered.filterNoise(filter,median);
                 return Arrays.copyOfRange(noiseFiltered,ends,noiseFiltered.length - ends);
             }
 
         }
         else {
-            FilterNoise left = new FilterNoise(arr,lo,(hi+lo)/2,filter,ends);
-            FilterNoise right = new FilterNoise(arr,(hi+lo)/2,hi,filter,ends);
+            //If need to reduce array size for a thread even more
+            //Create a thread with the first half of the array to process
+            FilterNoise left = new FilterNoise(arr,lo,(hi+lo)/2,filter,ends,median);
+            //Compute the other half of the array in the current thread
+            FilterNoise right = new FilterNoise(arr,(hi+lo)/2,hi,filter,ends,median);
+            //Wait for the first thread to finish
             left.fork();
+            //Get the array from the current thread computation
             double[] rightAns = right.compute();
+            //get array from the other thread
             double[] leftAns = left.join();
+            //Join the results of both threads
             return joinFilteredNoise(leftAns,rightAns);
         }
     }

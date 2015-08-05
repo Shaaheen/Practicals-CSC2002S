@@ -37,7 +37,7 @@ public class MedianTest extends TestCase {
      */
     public void testSerialFiltering(double[] testArray,double[] expectedArray,int filter) throws Exception{
         Serial test1 = new Serial(testArray);
-        double[] actualArray = test1.filterNoise(filter);
+        double[] actualArray = test1.filterNoise(filter,true);
         for (int i = 0; i < actualArray.length; i++){
             assertEquals("Failed at index " + i + " For Filter " + filter,expectedArray[i],actualArray[i]);
         }
@@ -100,8 +100,8 @@ public class MedianTest extends TestCase {
      */
     public void compareSerialVSParallel(double[] testArray,int filter, int testNo){
         Serial sr = new Serial(testArray);
-        double[] serialResult = sr.filterNoise(filter);
-        double[] parallelResult = RecursiveThread.filterArray(testArray, filter);
+        double[] serialResult = sr.filterNoise(filter,true);
+        double[] parallelResult = RecursiveThread.filterArray(testArray, filter,true);
         for (int i = 0; i < serialResult.length; i++){
             assertEquals("Failed at index " + i + " For Filter "  + filter + " Test : " + testNo ,serialResult[i], parallelResult[i]);
         }
