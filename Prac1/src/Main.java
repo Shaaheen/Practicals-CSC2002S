@@ -37,27 +37,54 @@ public class Main {
             if (option.equals("1")){
                 //Create and set Parallel class with name of file of array and filter
                 RecursiveThread RT1 = new RecursiveThread(workingDir + "inp1.txt",filter);
-                System.out.println("Parallel : " + RT1.parallelNoiseFilter());
+
+                double parallel = RT1.parallelNoiseFilter();
+                System.out.println("Parallel Time: " + parallel);
+
                 Serial sr = new Serial(workingDir  + "inp1.txt",filter);
-                System.out.println("Sequential : " + sr.serialNoiseFilter());
+                double serial = sr.serialNoiseFilter();
+                System.out.println("Sequential Time: " +  serial);
+
+                System.out.println("Parallel is " + serial/parallel + " faster");
             }
             else if (option.equals("2")){
-                RecursiveThread RT2 = new RecursiveThread(workingDir + "inp2.txt",filter);
-                System.out.println("Parallel : " + RT2.parallelNoiseFilter());
+                //Create and set Parallel class with name of file of array and filter
+                RecursiveThread RT1 = new RecursiveThread(workingDir + "inp2.txt",filter);
+
+                double parallel = RT1.parallelNoiseFilter();
+                System.out.println("Parallel Time: " + parallel);
+
                 Serial sr = new Serial(workingDir  + "inp2.txt",filter);
-                System.out.println("Sequential : " + sr.serialNoiseFilter());
+                double serial = sr.serialNoiseFilter();
+                System.out.println("Sequential Time: " +  serial);
+
+                System.out.println("Parallel is " + serial/parallel + " faster");
             }
             else if (option.equals("3")){
-                RecursiveThread RT3 = new RecursiveThread(workingDir + "inp3.txt",filter);
-                System.out.println("Parallel : " + RT3.parallelNoiseFilter());
+                //Create and set Parallel class with name of file of array and filter
+                RecursiveThread RT1 = new RecursiveThread(workingDir + "inp3.txt",filter);
+
+                double parallel = RT1.parallelNoiseFilter();
+                System.out.println("Parallel Time: " + parallel);
+
                 Serial sr = new Serial(workingDir  + "inp3.txt",filter);
-                System.out.println("Sequential : " + sr.serialNoiseFilter());
+                double serial = sr.serialNoiseFilter();
+                System.out.println("Sequential Time: " +  serial);
+
+                System.out.println("Parallel is " + serial/parallel + " faster");
             }
             else if (option.equals("4")){
-                RecursiveThread RT4 = new RecursiveThread(workingDir + "inp4.txt",filter);
-                System.out.println("Parallel : " + RT4.parallelNoiseFilter());
+                //Create and set Parallel class with name of file of array and filter
+                RecursiveThread RT1 = new RecursiveThread(workingDir + "inp4.txt",filter);
+
+                double parallel = RT1.parallelNoiseFilter();
+                System.out.println("Parallel Time: " + parallel);
+
                 Serial sr = new Serial(workingDir  + "inp4.txt",filter);
-                System.out.println("Sequential : " + sr.serialNoiseFilter());
+                double serial = sr.serialNoiseFilter();
+                System.out.println("Sequential Time: " +  serial);
+
+                System.out.println("Parallel is " + serial/parallel + " faster");
             }
             //Changes filter for arrays
             else if (option.equals("5")){

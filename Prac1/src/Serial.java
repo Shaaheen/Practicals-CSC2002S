@@ -3,10 +3,12 @@ package src;
 import com.sun.org.apache.xpath.internal.SourceTree;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Scanner;
 
 /**
  * Created by Shaaheen on 7/28/2015.
@@ -18,10 +20,10 @@ public class Serial {
     public static int filterTest = 3;
 
     //Stored variables for Serial Object
-    public double[] noise;
-    public double[] theFilteredNoise;
-    public int filter;
-    public int ends;
+    private double[] noise;
+    private double[] theFilteredNoise;
+    private int filter;
+    private int ends;
 
     //Constructor to set array in object
     public Serial(double[] noiseArray){
@@ -29,51 +31,36 @@ public class Serial {
         this.theFilteredNoise = new double[noiseArray.length];
     }
 
-    public static void main(String[] args) throws IOException {
-        //Gets absolute path of source directory - for text files
-        String workingDir = System.getProperty("user.dir");
-        //Set file name path of the first text files
-        double[] txt1 = FileUtil.getNoise(workingDir + "\\src\\TxtFiles\\inp1.txt");
+    public Serial(String fileName,int f) throws IOException {
+        this.noise = FileUtil.getNoise(fileName);
+        this.filter = f;
+        this.theFilteredNoise = new double[noise.length];
+    }
 
-
-        /*
-        long time3 = System.currentTimeMillis();
-        System.out.println("Inp1.txt -Start : " + dateFormat.format(date));
-        Serial srTx1 = new Serial(txt1);
-        System.out.println( "Created Object : " + dateFormat.format(date));
-        srTx1.filterNoise(filterTest);
-        System.out.println("Done : " + dateFormat.format(date));
-        long time4 = System.currentTimeMillis();
-        System.out.println("In Milli seconds : " + (time4 - time3));
-        //srTx1.printNoise();
-        System.out.println();
-        //System.out.println();
-        */
-
-
-        double[] txt5 = FileUtil.getNoise(workingDir + "\\src\\TxtFiles\\inp4.txt");
+    public double serialNoiseFilter(){
         long time1 = System.nanoTime();
-        System.out.println();
-        System.out.println("Inp4.txt - Start:");
-        Serial sr5 = new Serial(txt5);
-        double[] filtered1 = sr5.filterNoise(21);
+        double[] filtered1 = filterNoise(filter);
         long time2 = System.nanoTime();
-        System.out.println("Done: " + ((time2-time1 + 0.0)/1000000000) + " seconds");
-        System.out.println();
+        return (time2-time1 + 0.0)/1000000000;
+    }
 
-        //System.out.println(Arrays.toString(filtered1));
-
-
-
-        int[] testing = {5,6,8,2};
-        //System.out.println(Arrays.toString(Arrays.copyOfRange(testing,1,testing.length-1)));
-
+    public String markDownTimes(int repeat){
+        String exportString = "Times for Filter :," + filter + ",Array:," + "" + "\r\n" + "\r\n";
+        exportString = exportString + "Trials , Times " + "\r\n";
+        long time1,time2;
+        for (int i = 0; i < repeat ; i++){
+            time1 = System.nanoTime();
+            double[] filtered1 = filterNoise(filter);
+            time2 = System.nanoTime();
+            exportString = exportString + i + "," + ( (time2-time1 + 0.0) / 1000000000) + "\r\n";
+        }
+        return exportString;
     }
 
     /*
         Method to print array for comparison
      */
-    public void printNoise(){
+    private void printNoise(){
         for (int j = 0; j <noise.length; j++){
             System.out.print(noise[j] + " ");
         }
@@ -106,7 +93,7 @@ public class Serial {
     /*
         Method to get the median of a segment of an array at the index i
      */
-    public double getMiddle(int i){
+    private double getMiddle(int i){
         double[] tempArray = Arrays.copyOfRange(noise , i - ends , i + ends + 1 );
         Arrays.sort(tempArray);
         return tempArray[tempArray.length/2];
