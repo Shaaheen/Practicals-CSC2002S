@@ -59,7 +59,9 @@ public class Main {
                     "\r\n5)Change Filter (Filter is " + filter + ")" +
                     "\r\n6)Change type of Filtering (Type is " + med + ")" +
                     "\r\n7)Mark Down times and Speed Up in a CSV file" +
-                    "\r\n8)Quit");
+                    "\r\n8)Test speedup at different filters (CSV file)" +
+                    "\r\n9)Test speedup at different Sequential Cut-Offs (CSV file)" +
+                    "\r\n10)Quit");
 
             option = user_input.nextInt();
             //Create Parallel and Serial class to compare
@@ -74,7 +76,7 @@ public class Main {
                 double serial = sr.serialNoiseFilter(median);
                 System.out.println("Sequential Time: " +  serial);
 
-                System.out.println("Parallel is " + serial/parallel + " faster");
+                System.out.println("Parallel is " + serial / parallel + " faster");
             }
             //Changes filter for arrays
             else if (option == 5){
@@ -101,6 +103,53 @@ public class Main {
                 System.out.println("Enter number of times to repeat filterings");
                 markDownSpeedUps(user_input.nextInt(),getNoiseFromOption(file));
                 user_input.nextLine();
+            }
+            else if (option == 8){
+                System.out.println("Filtering with different filters...");
+                PrintStream strm2 = new PrintStream("Filters.csv");
+                strm2.print("Filters,Speed-Up Inp2.txt" + "\r\n");
+                for (int i = 3; i <= 21; i+=2) {
+                    strm2.print(i + ",");
+                    double avgSpeedUp = 0;
+                    for (int j = 0; j < 1000; j++) {
+                        //Create and set Parallel class with name of file of array and filter
+                        RecursiveThread RT1 = new RecursiveThread(inp2,i);
+
+                        double parallel = RT1.parallelNoiseFilter(median);
+
+                        Serial sr = new Serial(inp2,i);
+                        double serial = sr.serialNoiseFilter(median);
+
+                        double speedUp = serial/parallel;
+
+                        avgSpeedUp += speedUp;
+                    }
+                    strm2.print((avgSpeedUp / 1000.0) + "\r\n");
+                }
+            }
+            else if (option == 9){
+                System.out.println("Tesing different sequential cut-offs...");
+                PrintStream strm2 = new PrintStream("SequentialCutOffs.csv");
+                strm2.print("SequentialCutOff,Speed-Up Inp2.txt" + "\r\n");
+                for (int i = 100; i <= 150000; i*=2) {
+                    strm2.print(i + ",");
+                    double avgSpeedUp = 0;
+                    for (int j = 0; j < 1000; j++) {
+                        //Create and set Parallel class with name of file of array and filter
+                        RecursiveThread RT1 = new RecursiveThread(inp2,19);
+                        RT1.changeSequentialCutOff(i);
+
+                        double parallel = RT1.parallelNoiseFilter(median);
+
+                        Serial sr = new Serial(inp2,19);
+                        double serial = sr.serialNoiseFilter(median);
+
+                        double speedUp = serial/parallel;
+
+                        avgSpeedUp += speedUp;
+                    }
+                    strm2.print((avgSpeedUp / 1000.0) + "\r\n");
+                }
             }
             else{
                 System.exit(0);

@@ -6,6 +6,7 @@ import java.io.IOException;
 
 /**
  * Created by Shaaheen on 7/30/2015.
+ * Class to provide a way to get array from files
  */
 public class FileUtil {
 
@@ -22,7 +23,7 @@ public class FileUtil {
             String[] split = line.split(" ");
             noiseArray[i] = Double.parseDouble(split[1]);
             i++;
-        }
+         }
         return noiseArray;
     }
 }

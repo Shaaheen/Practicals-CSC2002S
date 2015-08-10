@@ -17,6 +17,7 @@ import java.util.concurrent.RecursiveTask;
 
 /**
  * Created by Shaaheen on 7/30/2015.
+ * Class to parallelize median filtering
  */
 public class RecursiveThread {
 
@@ -36,8 +37,8 @@ public class RecursiveThread {
     }
 
     //Constructor to set array and filter
-    public RecursiveThread(String filename,int f) throws IOException {
-        this.noiseAry = FileUtil.getNoise(filename);
+    public RecursiveThread(double[] noise,int f) throws IOException {
+        this.noiseAry = noise;
         this.filter = f;
     }
 
@@ -65,10 +66,14 @@ public class RecursiveThread {
         stream.print(exportString);
         return exportString;
     }
+
+    public static void changeSequentialCutOff(int seq){
+        FilterNoise.SEQUENTIAL_THRESHOLD = seq;
+    }
 }
 
 //Threaded class
-class FilterNoise extends RecursiveTask<double[]> {
+class FilterNoise extends RecursiveTask< double[] > {
     //Instance variables of a thread
     static int SEQUENTIAL_THRESHOLD = 10000;
     int lo;
@@ -139,7 +144,9 @@ class FilterNoise extends RecursiveTask<double[]> {
         Method to join two integer arrays together
      */
     public double[] joinFilteredNoise(double[] a1,double[] a2){
+
         double[] joined = new double[a1.length + a2.length];
+
         for (int i = 0 ; i < (a1.length + a2.length); i++){
             if (i >= a1.length ){
                 joined[i] = a2[ i - a1.length];
@@ -148,7 +155,9 @@ class FilterNoise extends RecursiveTask<double[]> {
                 joined[i] = a1[i];
             }
         }
+
         return joined;
+
     }
 }
 

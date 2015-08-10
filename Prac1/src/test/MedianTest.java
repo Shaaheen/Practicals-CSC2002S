@@ -6,6 +6,9 @@ import src.*;
 
 public class MedianTest extends TestCase {
 
+    //*************CREATE MORE TEST CASES****************
+    //^^^^^^^^^^^^CREATE RANDOM TEST CASES FOR SEQUENTIAL VS PARALLEL^^^^^^^^^^^^^^^^^^^
+
     /*
         Method to test if the Serial class median filtering works
      */
