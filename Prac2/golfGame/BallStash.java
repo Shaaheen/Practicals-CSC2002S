@@ -8,11 +8,32 @@ public class BallStash {
 	private static int sizeStash=20;
 	private static int sizeBucket=4;
 	//ADD variables: a collection of golf balls, called stash
+	golfBall[] balls;
 	
 	
 	//ADD methods:
+	public BallStash(int initStash){
+		this.sizeStash = initStash;
+		this.balls = new golfBall[initStash];
+	}
+
 	//getBucketBalls
+	/*
+		Method to "take" balls from the stack
+		Just reduce the stack by the size of a bucket
+	 */
+	protected boolean getBucketBalls(){
+		if (sizeStash >sizeBucket){
+			sizeStash-=sizeBucket;
+			return true;
+		}
+		return false;
+	}
+
 	// addBallsToStash
+	protected void addBallsToStash(int ballsCollected,int noCollected){
+		sizeStash+=noCollected;
+	}
 	// getBallsInStash - return number of balls in the stash
 	
 	

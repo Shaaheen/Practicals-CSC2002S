@@ -19,6 +19,7 @@ public class DrivingRangeApp {
 		Golfer.setBallsPerBucket(sizeBucket);
 		
 		//initialize shared variables
+		Range range = new Range();
 		
 		//create threads and set them running
 
