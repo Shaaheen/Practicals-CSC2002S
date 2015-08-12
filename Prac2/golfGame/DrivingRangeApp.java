@@ -20,8 +20,14 @@ public class DrivingRangeApp {
 		
 		//initialize shared variables
 		Range range = new Range();
-		
+		BallStash stash = new BallStash(sizeStash);
+		AtomicBoolean cart = new AtomicBoolean(false);
+
 		//create threads and set them running
+		Golfer testGolfer = new Golfer(stash,range,cart,done);
+		Golfer testSecondGolfer = new Golfer(stash,range,cart,done);
+		testGolfer.start();
+		testSecondGolfer.start();
 
 		System.out.println("=======   River Club Driving Range Open  ========");
 		System.out.println("======= Golfers:"+noGolfers+" balls: "+sizeStash+ " bucketSize:"+sizeBucket+"  ======");

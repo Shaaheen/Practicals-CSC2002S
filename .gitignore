@@ -1,5 +1,7 @@
 *.csv
 *.txt
 *.class
-Prac2\out\
-Prac1\out\
+Prac2/out/
+Prac1/out/
+Prac2/.idea/
+Prac1/.idea/

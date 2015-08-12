@@ -33,7 +33,7 @@ public class Golfer extends Thread {
 		myID=newGolfID();
 	}
 
-	public  static int newGolfID() { 
+	public static int newGolfID() {
 		noGolfers++;
 		return noGolfers;
 	}
@@ -47,11 +47,9 @@ public class Golfer extends Thread {
 	public void run() {
 		
 	while (done.get()!=true) {
-		
-	    
-			 
+
 			System.out.println(">>> Golfer #"+ myID + " trying to fill bucket with "+getBallsPerBucket()+" balls.");
-			// sharedStash.getBucketBalls
+			golferBucket = sharedStash.getBucketBalls();
 			System.out.println("<<< Golfer #"+ myID + " filled bucket with          "+getBallsPerBucket()+" balls");
 			
 		
@@ -61,7 +59,7 @@ public class Golfer extends Thread {
 		    try {
 				sleep(swingTime.nextInt(2000));
 				// sharedField.hitBallOntoField
-				System.out.println("Golfer #"+ myID + " hit ball #"+golferBucket[b].getID()+" onto field");	
+				//System.out.println("Golfer #"+ myID + " hit ball #"+golferBucket[b].getID()+" onto field");
 				
 				
 			} catch (InterruptedException e) {
