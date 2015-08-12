@@ -41,7 +41,7 @@ public class BallStash {
 				tempAry.add(golfBallsList.pop());
 				counter++;
 			}
-			if (tempAry != null){
+			if (tempAry.size() != 0 ){
 				retrieved = new golfBall[tempAry.size()];
 				sizeStash-=retrieved.length;
 				System.out.println("Size of stash reduced from " + (sizeStash+retrieved.length) + " to " + sizeStash);

@@ -37,15 +37,18 @@ public class Bollie extends Thread{
 						continue;
 					}
 
-					sleep(1000);
+					System.out.println("Before 4 seconds");
+					sleep(2000);
 					System.out.println("Done physically ");
 				}
 
 				// collect balls, no golfers allowed to swing while this is happening
+				synchronized (sharedStash){
+					System.out.println("*********** Bollie adding balls to stash ************");
+					sharedStash.addBallsToStash(ballsCollected,ballsCollected.length);
+					System.out.println("Done adding to stash");
+				}
 
-				System.out.println("*********** Bollie adding balls to stash ************");	
-				sharedStash.addBallsToStash(ballsCollected,ballsCollected.length);
-				System.out.println("Done adding to stash");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
