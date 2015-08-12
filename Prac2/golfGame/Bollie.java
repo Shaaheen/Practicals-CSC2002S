@@ -31,11 +31,14 @@ public class Bollie extends Thread{
 				//Michelle - sharedField.collectAllBallsFromField(ballsCollected);
 				ballsCollected = sharedField.collectAllBallsFromField();
 
+				if (ballsCollected == null){
+					continue;
+				}
 				// collect balls, no golfers allowed to swing while this is happening
 				sleep(1000);
 				System.out.println("*********** Bollie adding balls to stash ************");	
 				sharedStash.addBallsToStash(ballsCollected,ballsCollected.length);
-				
+				System.out.println("Done adding to stash");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

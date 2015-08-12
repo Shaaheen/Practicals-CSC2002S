@@ -33,7 +33,7 @@ public class BallStash {
 		synchronized (this){
 			ArrayList<golfBall> tempAry = new ArrayList<golfBall>();
 			golfBall[] retrieved;
-			int counter = 1;
+			int counter = 0;
 			while(!golfBallsList.isEmpty()){
 				if (counter >= sizeBucket){
 					break;
@@ -41,9 +41,10 @@ public class BallStash {
 				tempAry.add(golfBallsList.pop());
 				counter++;
 			}
-			System.out.println("Size of stash reduced from " + (sizeStash+sizeBucket) + " to " + sizeStash);
 			if (tempAry != null){
 				retrieved = new golfBall[tempAry.size()];
+				sizeStash-=retrieved.length;
+				System.out.println("Size of stash reduced from " + (sizeStash+retrieved.length) + " to " + sizeStash);
 				return tempAry.toArray(retrieved);
 			}
 			System.out.println("Empty");
