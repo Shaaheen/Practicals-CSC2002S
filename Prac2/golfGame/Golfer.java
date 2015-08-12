@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Golfer extends Thread {
 
-	//remeber to ensure thread saftey
+	//remember to ensure thread saftey
 	
 	private AtomicBoolean done; 
 	private AtomicBoolean cartOnField;
@@ -59,7 +59,7 @@ public class Golfer extends Thread {
 		if (golferBucket == null){
 			continue;
 		}
-		for (int b=0;b<ballsPerBucket;b++)
+		for (int b=0;b<golferBucket.length;b++)
 		{ //for every ball in bucket
 			
 		    try {
@@ -73,7 +73,7 @@ public class Golfer extends Thread {
 			} //      swing
 		    
 			    
-		    //!!wair for cart if necessary if cart there
+		    //!!wait for cart if necessary if cart there
 		}
 		
 	      

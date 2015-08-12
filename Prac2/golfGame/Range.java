@@ -25,13 +25,12 @@ public class Range {
 		ballsOnFieldList.push(ball);
 	}
 
-	protected golfBall[] collectAllBallsFromField(){
-		synchronized (this){
-			golfBall[] collected = new golfBall[ballsOnFieldList.size()];
-			for (int i = 0; i < collected.length; i++) {
-				collected[i] = ballsOnFieldList.pop();
-			}
-			return collected;
+	protected synchronized golfBall[] collectAllBallsFromField(){
+		System.out.println("Collecting golf balls");
+		golfBall[] collected = new golfBall[ballsOnFieldList.size()];
+		for (int i = 0; i < collected.length; i++) {
+			collected[i] = ballsOnFieldList.pop();
 		}
+		return collected;
 	}
 }

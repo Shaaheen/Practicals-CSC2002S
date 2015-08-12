@@ -1,5 +1,7 @@
 package golfGame;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -27,14 +29,26 @@ public class BallStash {
 		Method to "take" balls from the stack
 		Just reduce the stack by the size of a bucket
 	 */
-	protected synchronized golfBall[] getBucketBalls(){
-		if (sizeStash >=sizeBucket){
-			sizeStash-=sizeBucket;
+	protected golfBall[] getBucketBalls(){
+		synchronized (this){
+			ArrayList<golfBall> tempAry = new ArrayList<golfBall>();
+			golfBall[] retrieved;
+			int counter = 1;
+			while(!golfBallsList.isEmpty()){
+				if (counter >= sizeBucket){
+					break;
+				}
+				tempAry.add(golfBallsList.pop());
+				counter++;
+			}
 			System.out.println("Size of stash reduced from " + (sizeStash+sizeBucket) + " to " + sizeStash);
-			return getBallArray(sizeBucket);
+			if (tempAry != null){
+				retrieved = new golfBall[tempAry.size()];
+				return tempAry.toArray(retrieved);
+			}
+			System.out.println("Empty");
+			return null;
 		}
-		System.out.println("Empty");
-		return null;
 	}
 
 	/*
@@ -49,12 +63,10 @@ public class BallStash {
 	}
 
 	// addBallsToStash
-	protected void addBallsToStash(golfBall[] ballsCollected,int noCollected){
-		synchronized (this){
-			sizeStash+=noCollected;
-			for (int i = 0; i < ballsCollected.length; i++) {
-				golfBallsList.push(ballsCollected[i]);
-			}
+	protected synchronized void addBallsToStash(golfBall[] ballsCollected,int noCollected){
+		sizeStash+=noCollected;
+		for (int i = 0; i < ballsCollected.length; i++) {
+			golfBallsList.push(ballsCollected[i]);
 		}
 	}
 	// getBallsInStash - return number of balls in the stash
