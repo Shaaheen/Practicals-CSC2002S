@@ -18,5 +18,9 @@ public class golfBall {
 	private static void  incID() {
 		noBalls++;
 	}
+
+	public String toString(){
+		return getID() + "";
+	}
 	
 }

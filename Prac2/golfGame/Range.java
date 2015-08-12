@@ -30,7 +30,7 @@ public class Range {
 		numBallsOnField.getAndIncrement();
 	}
 
-	protected synchronized golfBall[] collectAllBallsFromField(){
+	protected golfBall[] collectAllBallsFromField(){
 		System.out.println("Collecting golf balls Num: " + numBallsOnField.get() + " Balls : " + Arrays.toString(ballsOnFieldList.toArray()));
 		golfBall[] collected = new golfBall[ballsOnFieldList.size()];
 		for (int i = 0; i < collected.length; i++) {
