@@ -26,13 +26,15 @@ public class Bollie extends Thread{
 		golfBall [] ballsCollected = new golfBall[sharedStash.getSizeStash()];
 		while (done.get()!=true) {
 			try {
-				sleep(waitTime.nextInt(1000));
+				sleep(waitTime.nextInt(5000));
 				System.out.println("*********** Bollie collecting balls   ************");	
-				// sharedField.collectAllBallsFromField(ballsCollected);
+				//Michelle - sharedField.collectAllBallsFromField(ballsCollected);
+				ballsCollected = sharedField.collectAllBallsFromField();
+
 				// collect balls, no golfers allowed to swing while this is happening
 				sleep(1000);
 				System.out.println("*********** Bollie adding balls to stash ************");	
-				//sharedStash.addBallsToStash(ballsCollected,noCollected);
+				sharedStash.addBallsToStash(ballsCollected,ballsCollected.length);
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

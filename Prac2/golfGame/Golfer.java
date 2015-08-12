@@ -48,18 +48,24 @@ public class Golfer extends Thread {
 		
 	while (done.get()!=true) {
 
+		if (golferBucket == null){
+			continue;
+		}
+
 			System.out.println(">>> Golfer #"+ myID + " trying to fill bucket with "+getBallsPerBucket()+" balls.");
 			golferBucket = sharedStash.getBucketBalls();
 			System.out.println("<<< Golfer #"+ myID + " filled bucket with          "+getBallsPerBucket()+" balls");
 			
-		
+		if (golferBucket == null){
+			continue;
+		}
 		for (int b=0;b<ballsPerBucket;b++)
 		{ //for every ball in bucket
 			
 		    try {
 				sleep(swingTime.nextInt(2000));
-				// sharedField.hitBallOntoField
-				//System.out.println("Golfer #"+ myID + " hit ball #"+golferBucket[b].getID()+" onto field");
+				sharedField.hitBallOntoField(golferBucket[b]);
+				System.out.println("Golfer #"+ myID + " hit ball #"+golferBucket[b].getID()+" onto field");
 				
 				
 			} catch (InterruptedException e) {

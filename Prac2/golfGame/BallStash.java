@@ -28,7 +28,7 @@ public class BallStash {
 		Just reduce the stack by the size of a bucket
 	 */
 	protected synchronized golfBall[] getBucketBalls(){
-		if (sizeStash >sizeBucket){
+		if (sizeStash >=sizeBucket){
 			sizeStash-=sizeBucket;
 			System.out.println("Size of stash reduced from " + (sizeStash+sizeBucket) + " to " + sizeStash);
 			return getBallArray(sizeBucket);
@@ -49,8 +49,13 @@ public class BallStash {
 	}
 
 	// addBallsToStash
-	protected void addBallsToStash(int ballsCollected,int noCollected){
-		sizeStash+=noCollected;
+	protected void addBallsToStash(golfBall[] ballsCollected,int noCollected){
+		synchronized (this){
+			sizeStash+=noCollected;
+			for (int i = 0; i < ballsCollected.length; i++) {
+				golfBallsList.push(ballsCollected[i]);
+			}
+		}
 	}
 	// getBallsInStash - return number of balls in the stash
 	

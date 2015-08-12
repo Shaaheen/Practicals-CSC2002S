@@ -19,18 +19,20 @@ public class DrivingRangeApp {
 		Golfer.setBallsPerBucket(sizeBucket);
 		
 		//initialize shared variables
-		Range range = new Range();
+		Range range = new Range(sizeStash);
 		BallStash stash = new BallStash(sizeStash);
 		AtomicBoolean cart = new AtomicBoolean(false);
+
+		System.out.println("=======   River Club Driving Range Open  ========");
+		System.out.println("======= Golfers:"+noGolfers+" balls: "+sizeStash+ " bucketSize:"+sizeBucket+"  ======");
 
 		//create threads and set them running
 		Golfer testGolfer = new Golfer(stash,range,cart,done);
 		Golfer testSecondGolfer = new Golfer(stash,range,cart,done);
+		Bollie myBOI = new Bollie(stash,range,done);
+		myBOI.start();
 		testGolfer.start();
 		testSecondGolfer.start();
-
-		System.out.println("=======   River Club Driving Range Open  ========");
-		System.out.println("======= Golfers:"+noGolfers+" balls: "+sizeStash+ " bucketSize:"+sizeBucket+"  ======");
 
 		//for testing, just run for a bit
 		Thread.sleep(10000);// this is an arbitrary value - you may want to make it random
