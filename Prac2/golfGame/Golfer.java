@@ -75,8 +75,10 @@ public class Golfer extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} //      swing
-		    
-			    
+
+			if (done.get()){
+				break;
+			}
 		    //!!wait for cart if necessary if cart there
 		}
 		

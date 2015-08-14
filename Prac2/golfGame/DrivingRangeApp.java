@@ -27,15 +27,15 @@ public class DrivingRangeApp {
 		System.out.println("======= Golfers:"+noGolfers+" balls: "+sizeStash+ " bucketSize:"+sizeBucket+"  ======");
 
 		//create threads and set them running
-		Golfer testGolfer = new Golfer(stash,range,cart,done);
-		Golfer testSecondGolfer = new Golfer(stash,range,cart,done);
+		for (int i = 0; i < noGolfers; i++) {
+			Golfer newGolfer = new Golfer(stash,range,cart,done);
+			newGolfer.start();
+		}
 		Bollie myBOI = new Bollie(stash,range,done);
 		myBOI.start();
-		testGolfer.start();
-		testSecondGolfer.start();
 
 		//for testing, just run for a bit
-		Thread.sleep(10000);// this is an arbitrary value - you may want to make it random
+		Thread.sleep(30000);// this is an arbitrary value - you may want to make it random
 		done.set(true);
 		System.out.println("=======  River Club Driving Range Closing ========");
 

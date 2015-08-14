@@ -25,9 +25,11 @@ public class Range {
 	//ADD method: collectAllBallsFromField(golfBall [] ballsCollected) 
 
 	//ADD method: hitBallOntoField(golfBall ball)
-	protected synchronized void hitBallOntoField(golfBall ball){
-		ballsOnFieldList.push(ball);
-		numBallsOnField.getAndIncrement();
+	protected void hitBallOntoField(golfBall ball){
+		synchronized (this){
+			ballsOnFieldList.push(ball);
+			numBallsOnField.getAndIncrement();
+		}
 	}
 
 	protected synchronized golfBall[] collectAllBallsFromField(){
