@@ -26,7 +26,8 @@ public class Bollie extends Thread{
 		golfBall [] ballsCollected = new golfBall[sharedStash.getSizeStash()];
 		while (done.get()!=true) {
 			try {
-				sleep(waitTime.nextInt(5000));
+				//sleep(waitTime.nextInt(10000));
+				sleep(10000);
 
 				System.out.println("*********** Bollie collecting balls   ************");
 				synchronized (sharedField){

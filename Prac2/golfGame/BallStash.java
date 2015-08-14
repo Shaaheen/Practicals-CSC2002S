@@ -29,11 +29,15 @@ public class BallStash {
 		Method to "take" balls from the stack
 		Just reduce the stack by the size of a bucket
 	 */
-	protected golfBall[] getBucketBalls(){
+	protected golfBall[] getBucketBalls() throws InterruptedException {
 		synchronized (this){
 			ArrayList<golfBall> tempAry = new ArrayList<golfBall>();
 			golfBall[] retrieved;
 			int counter = 0;
+			if (golfBallsList.isEmpty()){
+				System.out.println("Empty waiting to be filled...");
+				this.wait();
+			}
 			while(!golfBallsList.isEmpty()){
 				if (counter >= sizeBucket){
 					break;
@@ -47,7 +51,7 @@ public class BallStash {
 				System.out.println("Size of stash reduced from " + (sizeStash+retrieved.length) + " to " + sizeStash);
 				return tempAry.toArray(retrieved);
 			}
-			System.out.println("Empty");
+
 			return null;
 		}
 	}
@@ -65,6 +69,7 @@ public class BallStash {
 
 	// addBallsToStash
 	protected synchronized void addBallsToStash(golfBall[] ballsCollected,int noCollected){
+		this.notifyAll();
 		sizeStash+=noCollected;
 		for (int i = 0; i < ballsCollected.length; i++) {
 			golfBallsList.push(ballsCollected[i]);

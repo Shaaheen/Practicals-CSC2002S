@@ -53,8 +53,12 @@ public class Golfer extends Thread {
 		}
 
 			System.out.println(">>> Golfer #"+ myID + " trying to fill bucket with "+getBallsPerBucket()+" balls.");
+		try {
 			golferBucket = sharedStash.getBucketBalls();
-			System.out.println("<<< Golfer #"+ myID + " filled bucket with          "+getBallsPerBucket()+" balls");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("<<< Golfer #"+ myID + " filled bucket with          "+getBallsPerBucket()+" balls");
 			
 		if (golferBucket == null){
 			continue;
