@@ -17,22 +17,22 @@ public class Range {
 	LinkedList<golfBall> ballsOnFieldList;
 
 	//Add constructors
-	protected Range(int initStash){
+	protected Range(int initStash,AtomicBoolean cart){
 		ballsOnField = new golfBall[initStash];
 		ballsOnFieldList = new LinkedList<golfBall>();
 		numBallsOnField = new AtomicInteger();
+		cartOnField = cart;
 	}
 	//ADD method: collectAllBallsFromField(golfBall [] ballsCollected) 
 
 	//ADD method: hitBallOntoField(golfBall ball)
 	protected void hitBallOntoField(golfBall ball){
-		synchronized (this){
-			ballsOnFieldList.push(ball);
-			numBallsOnField.getAndIncrement();
-		}
+		ballsOnFieldList.push(ball);
+		numBallsOnField.getAndIncrement();
 	}
 
 	protected synchronized golfBall[] collectAllBallsFromField(){
+		cartOnField.set(true);
 		System.out.println("Collecting golf balls Num: " + numBallsOnField.get() + " Balls : " + Arrays.toString(ballsOnFieldList.toArray()));
 		golfBall[] collected = new golfBall[ballsOnFieldList.size()];
 		for (int i = 0; i < collected.length; i++) {
@@ -41,5 +41,9 @@ public class Range {
 		System.out.println("Done collecting ");
 		numBallsOnField.set(numBallsOnField.get() - collected.length);
 		return collected;
+	}
+
+	protected void setCartToOff(){
+		cartOnField.set(false);
 	}
 }

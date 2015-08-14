@@ -20,6 +20,7 @@ public class Golfer extends Thread {
 	private BallStash sharedStash; //link to shared stash
 	private Range sharedField; //link to shared field
 	private Random swingTime;
+	private int numBallsInBucket;
 	
 	
 	
@@ -31,6 +32,7 @@ public class Golfer extends Thread {
 		golferBucket = new golfBall[ballsPerBucket];
 		swingTime = new Random();
 		myID=newGolfID();
+		numBallsInBucket = 0;
 	}
 
 	public static int newGolfID() {
@@ -48,41 +50,43 @@ public class Golfer extends Thread {
 		
 	while (done.get()!=true) {
 
-		if (golferBucket == null){
-			continue;
-		}
+		System.out.println(">>> Golfer #"+ myID + " trying to fill bucket with "+getBallsPerBucket()+" balls.");
 
-			System.out.println(">>> Golfer #"+ myID + " trying to fill bucket with "+getBallsPerBucket()+" balls.");
 		try {
 			golferBucket = sharedStash.getBucketBalls();
+			//If driving range closes while the golfer has been waiting for balls
+			//
+			if (done.get()){
+				//break;
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println("<<< Golfer #"+ myID + " filled bucket with          "+getBallsPerBucket()+" balls");
-			
 		if (golferBucket == null){
-			continue;
+			numBallsInBucket = 0;
 		}
-		for (int b=0;b<golferBucket.length;b++)
+		else{
+			numBallsInBucket = golferBucket.length;
+		}
+		System.out.println("<<< Golfer #"+ myID + " filled bucket with          "+getBallsPerBucket()+" balls");
+		for (int b=0;b<numBallsInBucket;b++)
 		{ //for every ball in bucket
-			
-		    try {
+
+			try {
 				sleep(swingTime.nextInt(2000));
 				sharedField.hitBallOntoField(golferBucket[b]);
 				System.out.println("Golfer #"+ myID + " hit ball #"+golferBucket[b].getID()+" onto field");
-				
-				
+
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} //      swing
 
-			if (done.get()){
+			//!!wait for cart if necessary if cart there
+			if (done.get() || cartOnField.get()){
 				break;
 			}
-		    //!!wait for cart if necessary if cart there
 		}
-		
-	      
 	}
-	}	
+	}
 }

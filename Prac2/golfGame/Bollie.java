@@ -27,7 +27,7 @@ public class Bollie extends Thread{
 		while (done.get()!=true) {
 			try {
 				//sleep(waitTime.nextInt(10000));
-				sleep(10000);
+				sleep(5000);
 
 				System.out.println("*********** Bollie collecting balls   ************");
 				synchronized (sharedField){
@@ -40,7 +40,9 @@ public class Bollie extends Thread{
 
 					System.out.println("Before 4 seconds");
 					sleep(2000);
+					sharedField.setCartToOff();
 					System.out.println("Done physically ");
+
 				}
 
 				// collect balls, no golfers allowed to swing while this is happening

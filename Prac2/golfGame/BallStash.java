@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BallStash {
 	//static variables
@@ -13,10 +14,12 @@ public class BallStash {
 	//ADD variables: a collection of golf balls, called stash
 	golfBall[] balls;
 	LinkedList<golfBall> golfBallsList;
+	AtomicBoolean doneFlag;
 	
 	
 	//ADD methods:
-	public BallStash(int initStash){
+	public BallStash(int initStash,AtomicBoolean done){
+		this.doneFlag = done;
 		this.sizeStash = initStash;
 		this.balls = new golfBall[initStash];
 		golfBallsList = new LinkedList<golfBall>();
@@ -37,6 +40,12 @@ public class BallStash {
 			if (golfBallsList.isEmpty()){
 				System.out.println("Empty waiting to be filled...");
 				this.wait();
+				//If the driving range closes while the golfer is trying
+				//to get balls then stop him from proceeding as he will be
+				//told to leave
+				if (doneFlag.get()){
+
+				}
 			}
 			while(!golfBallsList.isEmpty()){
 				if (counter >= sizeBucket){
@@ -51,7 +60,7 @@ public class BallStash {
 				System.out.println("Size of stash reduced from " + (sizeStash+retrieved.length) + " to " + sizeStash);
 				return tempAry.toArray(retrieved);
 			}
-
+			//Gets hit if Bollie didn't add enough balls for everyone
 			return null;
 		}
 	}
