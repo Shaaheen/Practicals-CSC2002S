@@ -40,10 +40,10 @@ public class Golfer extends Thread {
 		return noGolfers;
 	}
 	
-	public static void setBallsPerBucket (int noBalls) {
+	public void setBallsPerBucket (int noBalls) {
 		ballsPerBucket=noBalls;
 	}
-	public static int getBallsPerBucket () {
+	public int getBallsPerBucket () {
 		return ballsPerBucket;
 	}
 	public void run() {
@@ -68,7 +68,7 @@ public class Golfer extends Thread {
 		else{
 			numBallsInBucket = golferBucket.length;
 		}
-		System.out.println("<<< Golfer #"+ myID + " filled bucket with          "+getBallsPerBucket()+" balls");
+		System.out.println("<<< Golfer #"+ myID + " filled bucket with          " +numBallsInBucket + " balls" + " remaining stash " + sharedStash.getSizeStash());
 		for (int b=0;b<numBallsInBucket;b++)
 		{ //for every ball in bucket
 

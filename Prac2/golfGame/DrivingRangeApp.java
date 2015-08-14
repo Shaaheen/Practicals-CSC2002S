@@ -14,12 +14,14 @@ public class DrivingRangeApp {
 		int noGolfers =5;
 		int sizeStash=20;
 		int sizeBucket=5;
-		BallStash.setSizeStash(sizeStash);
-		BallStash.setSizeBucket(sizeBucket);
-		Golfer.setBallsPerBucket(sizeBucket);
+
+
 		
 		//initialize shared variables
 		BallStash stash = new BallStash(sizeStash,done);
+		stash.setSizeStash(sizeStash);
+		stash.setSizeBucket(sizeBucket);
+
 		AtomicBoolean cart = new AtomicBoolean(false);
 		Range range = new Range(sizeStash,cart);
 
@@ -29,6 +31,7 @@ public class DrivingRangeApp {
 		//create threads and set them running
 		for (int i = 0; i < noGolfers; i++) {
 			Golfer newGolfer = new Golfer(stash,range,cart,done);
+			newGolfer.setBallsPerBucket(sizeBucket);
 			newGolfer.start();
 		}
 		Bollie myBOI = new Bollie(stash,range,done);

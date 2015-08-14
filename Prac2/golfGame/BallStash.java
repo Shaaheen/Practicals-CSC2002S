@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BallStash {
 	//static variables
-	private static int sizeStash=20;
-	private static int sizeBucket=4;
+	private int sizeStash;
+	private int sizeBucket=4;
 	//ADD variables: a collection of golf balls, called stash
 	golfBall[] balls;
 	LinkedList<golfBall> golfBallsList;
@@ -44,7 +44,7 @@ public class BallStash {
 				//to get balls then stop him from proceeding as he will be
 				//told to leave
 				if (doneFlag.get()){
-
+					//return null;
 				}
 			}
 			while(!golfBallsList.isEmpty()){
@@ -88,16 +88,16 @@ public class BallStash {
 	
 	
 	//getters and setters for static variables - you need to edit these
-	public static  void setSizeBucket (int noBalls) {
+	public void setSizeBucket (int noBalls) {
 		sizeBucket=noBalls;
 	}
-	public static int getSizeBucket () {
+	public int getSizeBucket () {
 		return sizeBucket;
 	}
-	public static void setSizeStash (int noBalls) {
+	public void setSizeStash (int noBalls) {
 		sizeStash=noBalls;
 	}
-	public static int getSizeStash () {
+	public int getSizeStash () {
 		return sizeStash;
 	}
 	

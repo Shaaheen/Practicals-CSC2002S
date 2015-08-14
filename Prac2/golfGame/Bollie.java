@@ -30,6 +30,7 @@ public class Bollie extends Thread{
 				sleep(5000);
 
 				System.out.println("*********** Bollie collecting balls   ************");
+				//Goes into Field object and retrieves balls hence no other thread should interrupt the Field
 				synchronized (sharedField){
 					//Michelle - sharedField.collectAllBallsFromField(ballsCollected);
 					ballsCollected = sharedField.collectAllBallsFromField();
