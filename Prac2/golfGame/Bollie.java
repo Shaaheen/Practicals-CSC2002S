@@ -26,9 +26,8 @@ public class Bollie extends Thread{
 		golfBall [] ballsCollected = new golfBall[sharedStash.getSizeStash()];
 		while (done.get()!=true) {
 			try {
-				//sleep(waitTime.nextInt(10000));
-				sleep(5000);
-
+				sleep(waitTime.nextInt(5000));
+				//sleep(5000);
 				System.out.println("*********** Bollie collecting balls   ************");
 				//Goes into Field object and retrieves balls hence no other thread should interrupt the Field
 				synchronized (sharedField){
@@ -39,10 +38,10 @@ public class Bollie extends Thread{
 						continue;
 					}
 
-					System.out.println("Before 4 seconds");
+					System.out.println("Still on field - Golfers can finish swing (only one swing)");
 					sleep(2000);
 					sharedField.setCartToOff();
-					System.out.println("Done physically ");
+					System.out.println("Off the field ");
 
 				}
 
@@ -56,7 +55,8 @@ public class Bollie extends Thread{
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
-		    		}
+			}
+		}
+
 		}	
 }
