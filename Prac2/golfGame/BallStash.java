@@ -22,7 +22,8 @@ public class BallStash {
 		this.doneFlag = done;
 		this.sizeStash = initStash;
 		this.balls = new golfBall[initStash];
-		golfBallsList = new LinkedList<golfBall>();
+		this.golfBallsList = new LinkedList<golfBall>();
+
 		for (int i = 0; i < initStash; i++) {
 			golfBallsList.push(new golfBall());
 		}
@@ -32,37 +33,43 @@ public class BallStash {
 		Method to "take" balls from the stack
 		Just reduce the stack by the size of a bucket
 	 */
-	protected golfBall[] getBucketBalls() throws InterruptedException {
-		synchronized (this){
-			ArrayList<golfBall> tempAry = new ArrayList<golfBall>();
-			golfBall[] retrieved;
-			int counter = 0;
-			if (golfBallsList.isEmpty()){
-				System.out.println("Empty waiting to be filled...");
-				this.wait();
-				//If the driving range closes while the golfer is trying
-				//to get balls then stop him from proceeding as he will be
-				//told to leave
-				if (doneFlag.get()){
-					//return null;
-				}
+	protected synchronized golfBall[] getBucketBalls(int golferID) throws InterruptedException {
+		ArrayList<golfBall> tempAry = new ArrayList<golfBall>();
+		golfBall[] retrieved;
+		int counter = 0;
+		if (golfBallsList.isEmpty()){
+			System.out.println("Golfer #" + golferID + " is waiting for stash to be filled...");
+			this.wait();
+			//If the driving range closes while the golfer is trying
+			//to get balls then stop him from proceeding as he will be
+			//told to leave
+			if (doneFlag.get()){
+				return null;
 			}
-			while(!golfBallsList.isEmpty()){
-				if (counter >= sizeBucket){
-					break;
-				}
-				tempAry.add(golfBallsList.pop());
-				counter++;
-			}
-			if (tempAry.size() != 0 ){
-				retrieved = new golfBall[tempAry.size()];
-				sizeStash-=retrieved.length;
-				System.out.println("Size of stash reduced from " + (sizeStash+retrieved.length) + " to " + sizeStash);
-				return tempAry.toArray(retrieved);
-			}
-			//Gets hit if Bollie didn't add enough balls for everyone
-			return null;
 		}
+		while(!golfBallsList.isEmpty()){
+			if (counter >= sizeBucket){
+				break;
+			}
+			tempAry.add(golfBallsList.pop());
+			counter++;
+		}
+		if (tempAry.size() != 0 ){
+			retrieved = new golfBall[tempAry.size()];
+			sizeStash-=retrieved.length;
+			System.out.println("Golfer #" + golferID + " filled bucket with " + retrieved.length + " balls           remaining stash: " + sizeStash);
+			return tempAry.toArray(retrieved);
+		}
+		//Gets hit if Bollie didn't add enough balls for everyone
+		return null;
+	}
+
+	/*
+		Method to notify Golfers who are waiting for a bucket to leave the range
+		when it closes
+	 */
+	protected synchronized void notifyTheWaitingGolfers(){
+		this.notifyAll();
 	}
 
 	/*
@@ -97,7 +104,7 @@ public class BallStash {
 	public void setSizeStash (int noBalls) {
 		sizeStash=noBalls;
 	}
-	public int getSizeStash () {
+	public synchronized int getSizeStash () {
 		return sizeStash;
 	}
 	

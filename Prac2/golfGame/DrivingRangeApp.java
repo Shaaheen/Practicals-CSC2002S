@@ -41,8 +41,7 @@ public class DrivingRangeApp {
 		Thread.sleep(30000);// this is an arbitrary value - you may want to make it random
 		done.set(true);
 		System.out.println("=======  River Club Driving Range Closing ========");
-
-		
+		stash.notifyTheWaitingGolfers();
 	}
 
 }
