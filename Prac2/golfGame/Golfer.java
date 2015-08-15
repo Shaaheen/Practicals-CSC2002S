@@ -47,46 +47,52 @@ public class Golfer extends Thread {
 		return ballsPerBucket;
 	}
 	public void run() {
-		
-	while (done.get()!=true) {
+		//Variable kept in attempt to store a more accurate measure of the remaining stash
+		//as threads all accessing the stash at the same time results in the incorrect
+		//stash remaining amount displayed
+		//int remainingStash = 0;
+		while (done.get()!=true) {
 
-		System.out.println(">>> Golfer #"+ myID + " trying to fill bucket with "+getBallsPerBucket()+" balls.");
-
-		try {
-			golferBucket = sharedStash.getBucketBalls();
-			//If driving range closes while the golfer has been waiting for balls
-			//
-			if (done.get()){
-				//break;
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		if (golferBucket == null){
-			numBallsInBucket = 0;
-		}
-		else{
-			numBallsInBucket = golferBucket.length;
-		}
-		System.out.println("<<< Golfer #"+ myID + " filled bucket with          " +numBallsInBucket + " balls" + " remaining stash " + sharedStash.getSizeStash());
-		for (int b=0;b<numBallsInBucket;b++)
-		{ //for every ball in bucket
+			System.out.println(">>> Golfer #"+ myID + " trying to fill bucket with "+getBallsPerBucket()+" balls.");
 
 			try {
-				sleep(swingTime.nextInt(2000));
-				sharedField.hitBallOntoField(golferBucket[b]);
-				System.out.println("Golfer #"+ myID + " hit ball #"+golferBucket[b].getID()+" onto field");
-
-
+				golferBucket = sharedStash.getBucketBalls(myID);
+				//remainingStash = sharedStash.getSizeStash();
+				//If driving range closes while the golfer has been waiting for balls
+				//Stop the thread (i.e Golfer leaves range)
+				if (done.get()){
+					break; //exits loop
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			} //      swing
+			}
+			if (golferBucket == null){
+				numBallsInBucket = 0;
+			}
+			else{
+				numBallsInBucket = golferBucket.length;
+			}
+			//System.out.println("<<< Golfer #"+ myID + " filled bucket with          " +numBallsInBucket + " balls" + " remaining stash " + remainingStash);
+			for (int b=0;b<numBallsInBucket;b++)
+			{ //for every ball in bucket
 
-			//!!wait for cart if necessary if cart there
-			if (done.get() || cartOnField.get()){
-				break;
+				try {
+					sleep(swingTime.nextInt(2000));
+					sharedField.hitBallOntoField(golferBucket[b]);
+					System.out.println("Golfer #"+ myID + " hit ball #"+golferBucket[b].getID()+" onto field");
+
+
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} //      swing
+
+				//!!wait for cart if necessary if cart there
+				while(cartOnField.get()){
+					//Wait
+				}
+				//break;
 			}
 		}
-	}
+		System.out.println("Golfer #" + myID + " left the range...");
 	}
 }
