@@ -57,6 +57,7 @@ public class BallStash {
 		if (tempAry.size() != 0 ){
 			retrieved = new golfBall[tempAry.size()];
 			sizeStash-=retrieved.length;
+
 			System.out.println("Golfer #" + golferID + " filled bucket with " + retrieved.length + " balls           remaining stash: " + sizeStash);
 			return tempAry.toArray(retrieved);
 		}
@@ -85,11 +86,11 @@ public class BallStash {
 
 	// addBallsToStash
 	protected synchronized void addBallsToStash(golfBall[] ballsCollected,int noCollected){
-		this.notifyAll();
 		sizeStash+=noCollected;
 		for (int i = 0; i < ballsCollected.length; i++) {
 			golfBallsList.push(ballsCollected[i]);
 		}
+		this.notifyAll();
 	}
 	// getBallsInStash - return number of balls in the stash
 	
@@ -104,7 +105,7 @@ public class BallStash {
 	public void setSizeStash (int noBalls) {
 		sizeStash=noBalls;
 	}
-	public synchronized int getSizeStash () {
+	public int getSizeStash () {
 		return sizeStash;
 	}
 	

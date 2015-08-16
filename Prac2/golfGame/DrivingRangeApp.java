@@ -1,6 +1,7 @@
 package golfGame;
 
 
+import java.util.Random;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -9,11 +10,13 @@ public class DrivingRangeApp {
 
 	public static void main(String[] args) throws InterruptedException {
 		AtomicBoolean done  =new AtomicBoolean(false);
+		Random golferEntranceTime = new Random();
+		Semaphore teesAvailable = new Semaphore(5);
 
 		//read these in as command line arguments instead of hard coding
-		int noGolfers =5;
-		int sizeStash=20;
-		int sizeBucket=5;
+		int noGolfers =20;
+		int sizeStash=50;
+		int sizeBucket=3;
 
 
 		
@@ -30,8 +33,9 @@ public class DrivingRangeApp {
 
 		//create threads and set them running
 		for (int i = 0; i < noGolfers; i++) {
-			Golfer newGolfer = new Golfer(stash,range,cart,done);
+			Golfer newGolfer = new Golfer(stash,range,cart,done,teesAvailable);
 			newGolfer.setBallsPerBucket(sizeBucket);
+			Thread.sleep(golferEntranceTime.nextInt(3000));
 			newGolfer.start();
 		}
 		Bollie myBOI = new Bollie(stash,range,done);

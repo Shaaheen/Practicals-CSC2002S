@@ -1,6 +1,7 @@
 package golfGame;
 
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -21,10 +22,11 @@ public class Golfer extends Thread {
 	private Range sharedField; //link to shared field
 	private Random swingTime;
 	private int numBallsInBucket;
+	private Semaphore sharedTees;
 	
 	
 	
-	Golfer(BallStash stash,Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag) {
+	Golfer(BallStash stash,Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag,Semaphore tees) {
 		sharedStash = stash; //shared 
 		sharedField = field; //shared
 		cartOnField = cartFlag; //shared
@@ -33,6 +35,7 @@ public class Golfer extends Thread {
 		swingTime = new Random();
 		myID=newGolfID();
 		numBallsInBucket = 0;
+		sharedTees = tees;
 	}
 
 	public static int newGolfID() {
@@ -47,17 +50,16 @@ public class Golfer extends Thread {
 		return ballsPerBucket;
 	}
 	public void run() {
-		//Variable kept in attempt to store a more accurate measure of the remaining stash
-		//as threads all accessing the stash at the same time results in the incorrect
-		//stash remaining amount displayed
-		//int remainingStash = 0;
+
+		System.out.println("!!!!!!!!!!!!!!! Golfer #" + myID + " entered the range !!!!!!!!!!!!!!!");
+
 		while (done.get()!=true) {
 
 			System.out.println(">>> Golfer #"+ myID + " trying to fill bucket with "+getBallsPerBucket()+" balls.");
 
 			try {
 				golferBucket = sharedStash.getBucketBalls(myID);
-				//remainingStash = sharedStash.getSizeStash();
+				sleep(500);
 				//If driving range closes while the golfer has been waiting for balls
 				//Stop the thread (i.e Golfer leaves range)
 				if (done.get()){
@@ -72,11 +74,17 @@ public class Golfer extends Thread {
 			else{
 				numBallsInBucket = golferBucket.length;
 			}
-			//System.out.println("<<< Golfer #"+ myID + " filled bucket with          " +numBallsInBucket + " balls" + " remaining stash " + remainingStash);
 			for (int b=0;b<numBallsInBucket;b++)
 			{ //for every ball in bucket
 
 				try {
+					//Will try to get a tee so golfer can hit balls
+					//(Only when starting to swing)
+					if (b == 0){
+						sharedTees.acquire();
+						System.out.println("Golfer #" + myID + " Got a Tee 				remaining Tees " + sharedTees.availablePermits());
+					}
+
 					sleep(swingTime.nextInt(2000));
 					sharedField.hitBallOntoField(golferBucket[b]);
 					System.out.println("Golfer #"+ myID + " hit ball #"+golferBucket[b].getID()+" onto field");
@@ -90,9 +98,14 @@ public class Golfer extends Thread {
 				while(cartOnField.get()){
 					//Wait
 				}
-				//break;
+
+				if (b == numBallsInBucket -1){
+					sharedTees.release();
+					System.out.println("Golfer #" + myID + " Left Tee			remaining Tees " + sharedTees.availablePermits());
+				}
 			}
+
 		}
-		System.out.println("Golfer #" + myID + " left the range...");
+		System.out.println("XXXXXXXXXXX Golfer #" + myID + " left the range... XXXXXXXXXXX");
 	}
 }
