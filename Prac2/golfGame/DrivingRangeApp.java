@@ -14,6 +14,7 @@ public class DrivingRangeApp {
 		Semaphore teesAvailable = new Semaphore(5);
 		int numBucketsPerGolfer = 3;
 
+		
 		//read these in as command line arguments instead of hard coding
 		int noGolfers =5;
 		int sizeStash=40;
