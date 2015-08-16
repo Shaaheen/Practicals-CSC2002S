@@ -23,10 +23,11 @@ public class Golfer extends Thread {
 	private Random swingTime;
 	private int numBallsInBucket;
 	private Semaphore sharedTees;
+	private int numBucketsPerGolfer;
 	
 	
 	
-	Golfer(BallStash stash,Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag,Semaphore tees) {
+	Golfer(BallStash stash,Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag,Semaphore tees,int numOfBuckets) {
 		sharedStash = stash; //shared 
 		sharedField = field; //shared
 		cartOnField = cartFlag; //shared
@@ -36,6 +37,7 @@ public class Golfer extends Thread {
 		myID=newGolfID();
 		numBallsInBucket = 0;
 		sharedTees = tees;
+		numBucketsPerGolfer = numOfBuckets;
 	}
 
 	public static int newGolfID() {
@@ -52,8 +54,15 @@ public class Golfer extends Thread {
 	public void run() {
 
 		System.out.println("!!!!!!!!!!!!!!! Golfer #" + myID + " entered the range !!!!!!!!!!!!!!!");
+		int bucketsUsed = 0;
 
 		while (done.get()!=true) {
+
+			//Golfer used all of his/her buckets - done golfing
+			if (bucketsUsed > numBucketsPerGolfer){
+				System.out.println("########### Golfer #" + myID + " used all his/her buckets ###########");
+				break;
+			}
 
 			System.out.println(">>> Golfer #"+ myID + " trying to fill bucket with "+getBallsPerBucket()+" balls.");
 
@@ -76,7 +85,6 @@ public class Golfer extends Thread {
 			}
 			for (int b=0;b<numBallsInBucket;b++)
 			{ //for every ball in bucket
-
 				try {
 					//Will try to get a tee so golfer can hit balls
 					//(Only when starting to swing)
@@ -99,9 +107,12 @@ public class Golfer extends Thread {
 					//Wait
 				}
 
+				//Last iteration of bucket - Last ball in bucket
+				//Leave the tee for another golfer and have used a bucket
 				if (b == numBallsInBucket -1){
-					sharedTees.release();
+					sharedTees.release(); //Make tee available
 					System.out.println("Golfer #" + myID + " Left Tee			remaining Tees " + sharedTees.availablePermits());
+					bucketsUsed ++; //Used a bucket
 				}
 			}
 

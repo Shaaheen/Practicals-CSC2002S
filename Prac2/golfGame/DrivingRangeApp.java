@@ -12,13 +12,12 @@ public class DrivingRangeApp {
 		AtomicBoolean done  =new AtomicBoolean(false);
 		Random golferEntranceTime = new Random();
 		Semaphore teesAvailable = new Semaphore(5);
+		int numBucketsPerGolfer = 3;
 
 		//read these in as command line arguments instead of hard coding
-		int noGolfers =20;
-		int sizeStash=50;
-		int sizeBucket=3;
-
-
+		int noGolfers =5;
+		int sizeStash=40;
+		int sizeBucket=5;
 		
 		//initialize shared variables
 		BallStash stash = new BallStash(sizeStash,done);
@@ -33,7 +32,7 @@ public class DrivingRangeApp {
 
 		//create threads and set them running
 		for (int i = 0; i < noGolfers; i++) {
-			Golfer newGolfer = new Golfer(stash,range,cart,done,teesAvailable);
+			Golfer newGolfer = new Golfer(stash,range,cart,done,teesAvailable,numBucketsPerGolfer);
 			newGolfer.setBallsPerBucket(sizeBucket);
 			Thread.sleep(golferEntranceTime.nextInt(3000));
 			newGolfer.start();
