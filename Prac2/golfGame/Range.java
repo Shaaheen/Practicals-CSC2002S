@@ -11,23 +11,26 @@ public class Range {
 	private static int sizeStash=20;
 	private AtomicBoolean cartOnField;
 
-	//ADD variable: ballsOnField collection;
 	AtomicInteger numBallsOnField;
 	golfBall[] ballsOnField;
 	LinkedList<golfBall> ballsOnFieldList;
 
-	//Add constructors
-	protected Range(int initStash,AtomicBoolean cart){
+	//constructor
+	public Range(int initStash, AtomicBoolean cart){
 		ballsOnField = new golfBall[initStash];
 		ballsOnFieldList = new LinkedList<golfBall>();
 		numBallsOnField = new AtomicInteger();
 		cartOnField = cart;
 	}
-	//ADD method: collectAllBallsFromField(golfBall [] ballsCollected) 
 
-	//ADD method: hitBallOntoField(golfBall ball)
 	protected void hitBallOntoField(golfBall ball){
-		ballsOnFieldList.push(ball);
+		//Synchronized to prevent interleaving where threads get the linked
+		//list at the same time and add to at same time, thus losing a write
+		//So golf balls don't get lost
+		synchronized (this){
+			ballsOnFieldList.push(ball);
+		}
+		//This is an atomic variable so doesn't need to be synchronized
 		numBallsOnField.getAndIncrement();
 	}
 

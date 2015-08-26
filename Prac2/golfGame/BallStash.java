@@ -69,7 +69,7 @@ public class BallStash {
 		Method to notify Golfers who are waiting for a bucket to leave the range
 		when it closes
 	 */
-	protected synchronized void notifyTheWaitingGolfers(){
+	public synchronized void notifyTheWaitingGolfers(){
 		this.notifyAll();
 	}
 

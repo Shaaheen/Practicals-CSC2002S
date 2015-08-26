@@ -7,13 +7,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Golfer extends Thread {
 
-	//remember to ensure thread saftey
-	
-	private AtomicBoolean done; 
+	//Done variable to indicate when the game is over
+	private AtomicBoolean done;
+	//
 	private AtomicBoolean cartOnField;
 	
-	private static int noGolfers; //shared amoungst threads
-	private  static int ballsPerBucket=4; //shared amoungst threads
+	private static int noGolfers; //shared amongst threads
+	private  static int ballsPerBucket=4; //shared amongst threads
 	
 	private int myID;
 	
@@ -27,7 +27,7 @@ public class Golfer extends Thread {
 	
 	
 	
-	Golfer(BallStash stash,Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag,Semaphore tees,int numOfBuckets) {
+	public Golfer(BallStash stash, Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag, Semaphore tees, int numOfBuckets) {
 		sharedStash = stash; //shared 
 		sharedField = field; //shared
 		cartOnField = cartFlag; //shared

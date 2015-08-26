@@ -12,7 +12,7 @@ public class Bollie extends Thread{
 	private Random waitTime;
 
 	//link to shared field
-	Bollie(BallStash stash,Range field,AtomicBoolean doneFlag) {
+	public Bollie(BallStash stash, Range field, AtomicBoolean doneFlag) {
 		sharedStash = stash; //shared 
 		sharedField = field; //shared
 		waitTime = new Random();
@@ -30,8 +30,9 @@ public class Bollie extends Thread{
 				//sleep(5000);
 				System.out.println("*********** Bollie collecting balls   ************");
 				//Goes into Field object and retrieves balls hence no other thread should interrupt the Field
-				synchronized (sharedField){
+				//synchronized (sharedField){
 					//Michelle - sharedField.collectAllBallsFromField(ballsCollected);
+
 					ballsCollected = sharedField.collectAllBallsFromField();
 
 					if (ballsCollected == null){
@@ -43,7 +44,7 @@ public class Bollie extends Thread{
 					sharedField.setCartToOff();
 					System.out.println("Off the field ");
 
-				}
+				//}
 
 				// collect balls, no golfers allowed to swing while this is happening
 				synchronized (sharedStash){
