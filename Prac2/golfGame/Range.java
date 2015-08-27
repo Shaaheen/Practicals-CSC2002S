@@ -53,8 +53,6 @@ public class Range {
 	Method to allow Bollie collect Balls from the field
 	 */
 	protected synchronized golfBall[] collectAllBallsFromField(){
-		//Set Bollie on field flag to true so Golfers know Bollie is on the field
-		cartOnField.set(true);
 		System.out.println("Collecting golf balls Num: " + numBallsOnField.get() + " Balls : " + Arrays.toString(ballsOnFieldList.toArray()));
 		//Get array of golf Balls of all golf Balls currently on the field
 		golfBall[] collected = new golfBall[ballsOnFieldList.size()]; //Creates new array that can store all balls on the field
@@ -75,5 +73,12 @@ public class Range {
 	 */
 	protected void setCartToOff(){
 		cartOnField.set(false);
+	}
+
+	/*
+	Set Bollie on field flag to true so Golfers know Bollie is on the field
+	 */
+	protected void setCartToOn(){
+		cartOnField.set(true);
 	}
 }

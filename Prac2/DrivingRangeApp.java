@@ -37,6 +37,7 @@ public class DrivingRangeApp {
 		// Bollie controls the permits for all golfers to make sure
 		//they don't come on to the field
 		//This is done to avoid spinning
+		Semaphore blockGolfers = new Semaphore(noGolfers);
 
 		// Done flag to indicate when driving range is closed
 		AtomicBoolean done  =new AtomicBoolean(false);
@@ -61,7 +62,7 @@ public class DrivingRangeApp {
 		//Cart variable so golfer knows when Bollie is collecting golf balls
 		AtomicBoolean cart = new AtomicBoolean(false);
 		//Share range object which serves as the field balls are hit onto
-		Range range = new Range(sizeStash,cart);
+		Range range = new Range(cart);
 
 		//Print to screen that range is open
 		System.out.println("================   River Club Driving Range Open  ========================");
@@ -70,7 +71,7 @@ public class DrivingRangeApp {
 		//Launch golfers (Allow golfers to enter range)
 		for (int i = 0; i < noGolfers; i++) {
 			//Creating Golfer thread with all necessary parameters
-			Golfer newGolfer = new Golfer(stash,sizeBucket,range,cart,done,teesAvailable,numBucketsPerGolfer);
+			Golfer newGolfer = new Golfer(stash,sizeBucket,range,cart,done,teesAvailable,numBucketsPerGolfer,blockGolfers);
 
 			//Will sleep for a random amount of time so golfers enter field randomly
 			Thread.sleep(golferEntranceTime.nextInt(3000));
@@ -78,7 +79,7 @@ public class DrivingRangeApp {
 			newGolfer.start();  //Runs thread
 		}
 		//Creation of Bollie thread which will collect balls from range and deliver to stash
-		Bollie myBOI = new Bollie(stash,range,done);
+		Bollie myBOI = new Bollie(stash,range,done,blockGolfers);
 		myBOI.start(); //Runs Bollie
 
 		//Make current thread sleep so other threads get priority on main console

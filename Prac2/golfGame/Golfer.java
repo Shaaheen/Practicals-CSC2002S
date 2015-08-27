@@ -24,10 +24,11 @@ public class Golfer extends Thread {
 	private int numBallsInBucket;
 	private Semaphore sharedTees;
 	private int numBucketsPerGolfer;
+	private Semaphore allowedToSwing;
 	
 	
 	
-	public Golfer(BallStash stash,int ballPerB, Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag, Semaphore tees, int numOfBuckets) {
+	public Golfer(BallStash stash,int ballPerB, Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag, Semaphore tees, int numOfBuckets,Semaphore letSwing) {
 		sharedStash = stash; //shared 
 		sharedField = field; //shared
 		cartOnField = cartFlag; //shared
@@ -39,6 +40,7 @@ public class Golfer extends Thread {
 		numBallsInBucket = 0;
 		sharedTees = tees;
 		numBucketsPerGolfer = numOfBuckets;
+		allowedToSwing = letSwing;
 	}
 
 	public static int newGolfID() {
@@ -104,8 +106,14 @@ public class Golfer extends Thread {
 				} //      swing
 
 				//!!wait for cart if necessary if cart there
-				while(cartOnField.get()){
+				if(cartOnField.get()){
 					//Wait
+					try {
+						allowedToSwing.acquire();
+						allowedToSwing.release();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 
 				//Last iteration of bucket - Last ball in bucket
