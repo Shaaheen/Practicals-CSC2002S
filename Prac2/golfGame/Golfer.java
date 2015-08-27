@@ -27,10 +27,11 @@ public class Golfer extends Thread {
 	
 	
 	
-	public Golfer(BallStash stash, Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag, Semaphore tees, int numOfBuckets) {
+	public Golfer(BallStash stash,int ballPerB, Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag, Semaphore tees, int numOfBuckets) {
 		sharedStash = stash; //shared 
 		sharedField = field; //shared
 		cartOnField = cartFlag; //shared
+		ballsPerBucket = ballPerB;
 		done = doneFlag;
 		golferBucket = new golfBall[ballsPerBucket];
 		swingTime = new Random();

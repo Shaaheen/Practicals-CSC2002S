@@ -1,9 +1,11 @@
 JAVAC = javac
 JFLAGS = -g
-SOURCES = Main.java \
-	src/FileUtil.java \
-	src/RecursiveThread.java \
-	src/Serial.java 
+SOURCES = DrivingRangeApp.java \
+	golfGame/BallStash.java \
+	golfGame/Bollie.java \
+	golfGame/Golfer.java \
+	golfGame/Range.java \
+	golfGame/golfBall.java 
 
 .SUFFIXES: .java .class
 
@@ -16,5 +18,5 @@ all:	$(CLS)
 
 
 clean:
-	@rm -f Main*.class
+	@rm -f DrivingRangeApp*.class
 	@rm -f $(SOURCES:.java=.class)

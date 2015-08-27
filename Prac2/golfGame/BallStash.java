@@ -18,7 +18,8 @@ public class BallStash {
 	
 	
 	//ADD methods:
-	public BallStash(int initStash,AtomicBoolean done){
+	public BallStash(int initStash,int sizeBucket,AtomicBoolean done){
+		this.sizeBucket = sizeBucket;
 		this.doneFlag = done;
 		this.sizeStash = initStash;
 		this.balls = new golfBall[initStash];

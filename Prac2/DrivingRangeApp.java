@@ -2,7 +2,9 @@ import golfGame.*;
 /*
 	Modified by Shaaheen Sacoor
 	SCRSHA001
-	
+
+	Main class to manage and create all appropriate thread objects with correct parameters
+	Also, determines start and end of driving range and when golfers will enter
  */
 
 import java.net.Inet4Address;
@@ -12,59 +14,70 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DrivingRangeApp {
 
-
 	public static void main(String[] args) throws InterruptedException {
-		AtomicBoolean done  =new AtomicBoolean(false);
 
 		//Random time generator that will tell us when to make a Golfer enter the range
 		Random golferEntranceTime = new Random();
+		//Random time to tell you when to close
 		Random closingTime = new Random();
 
+		//INITIAL VARIABLES SET TO DEFAULT VALUES
+		//CHANGED BELOW WITH COMMAND LINE PARAMS
+		int noGolfers =5; //Variable to loop through to create Golfer threads
+		int sizeStash=40; //Gets variable to set the initial size of the ball stash
+		int sizeBucket=5; // stores the max amount of balls a golfer can keep
+
+		//Extra Credit Variables
+		int numBucketsPerGolfer = 3; //Max amount of buckets a golfer can use
+
 		//Semaphore to keep track of Tees and fairness setting at true so Golfers get First In
-		//First Out priority with Queues
 		Semaphore teesAvailable = new Semaphore(5,true);
-		int numBucketsPerGolfer = 3;
 
+		//Semaphore to make the golfers wait for Bollie on the field
+		// Bollie controls the permits for all golfers to make sure
+		//they don't come on to the field
+		//This is done to avoid spinning
 
-		//read these in as command line arguments instead of hard coding
-		int noGolfers =5;
-		int sizeStash=40;
-		int sizeBucket=5;
+		// Done flag to indicate when driving range is closed
+		AtomicBoolean done  =new AtomicBoolean(false);
 
+		//Change initial variables to given command line
 		if (args.length >=3){
+			//Order Given in Assignment report
 			noGolfers = Integer.parseInt(args[0]);
 			sizeStash = Integer.parseInt(args[1]);
 			sizeBucket = Integer.parseInt(args[2]);
 		}
-		
-		//initialize shared variables
+
+		//If given extra credit variables in command line
+		if (args.length >=5){
+			numBucketsPerGolfer = Integer.parseInt(args[3]);
+			teesAvailable = new Semaphore(Integer.parseInt(args[4]),true);
+		}
 
 		//Share stash of golf balls between golfers - passed size of stash and done flag
-		//Needs to know when game is over so as to tell empty bucketed golfers to leave
-		//If range is closed
-		BallStash stash = new BallStash(sizeStash,done);
-		stash.setSizeStash(sizeStash);
-		stash.setSizeBucket(sizeBucket);
+		BallStash stash = new BallStash(sizeStash,sizeBucket,done);
 
 		//Cart variable so golfer knows when Bollie is collecting golf balls
 		AtomicBoolean cart = new AtomicBoolean(false);
 		//Share range object which serves as the field balls are hit onto
 		Range range = new Range(sizeStash,cart);
 
+		//Print to screen that range is open
 		System.out.println("================   River Club Driving Range Open  ========================");
 		System.out.println("======= Golfers:"+noGolfers+" balls: "+sizeStash+ " bucketSize:"+sizeBucket+"  ======");
 
-		//create threads and set them running
-		//Creating Golfer threads with all neccessary parameters
+		//Launch golfers (Allow golfers to enter range)
 		for (int i = 0; i < noGolfers; i++) {
+			//Creating Golfer thread with all necessary parameters
+			Golfer newGolfer = new Golfer(stash,sizeBucket,range,cart,done,teesAvailable,numBucketsPerGolfer);
 
-			Golfer newGolfer = new Golfer(stash,range,cart,done,teesAvailable,numBucketsPerGolfer);
-			newGolfer.setBallsPerBucket(sizeBucket);
 			//Will sleep for a random amount of time so golfers enter field randomly
 			Thread.sleep(golferEntranceTime.nextInt(3000));
+
 			newGolfer.start();  //Runs thread
 		}
-		//Creation of Bollie thread
+		//Creation of Bollie thread which will collect balls from range and deliver to stash
 		Bollie myBOI = new Bollie(stash,range,done);
 		myBOI.start(); //Runs Bollie
 
