@@ -66,7 +66,7 @@ public class DrivingRangeApp {
 
 		//Print to screen that range is open
 		System.out.println("================   River Club Driving Range Open  ========================");
-		System.out.println("======= Golfers:"+noGolfers+" balls: "+sizeStash+ " bucketSize:"+sizeBucket+"  ======");
+		System.out.println("======= Golfers:"+noGolfers+" balls: "+sizeStash+ " bucketSize:"+sizeBucket+ " buckets per Golfer: " + numBucketsPerGolfer + " Tees: " + teesAvailable.availablePermits() +  "  ======");
 
 		//Golfers share same random number generator to prevent
 		//the same sequence of numbers appearing in different threads
