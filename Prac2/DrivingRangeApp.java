@@ -68,10 +68,13 @@ public class DrivingRangeApp {
 		System.out.println("================   River Club Driving Range Open  ========================");
 		System.out.println("======= Golfers:"+noGolfers+" balls: "+sizeStash+ " bucketSize:"+sizeBucket+"  ======");
 
+		//Golfers share same random number generator to prevent
+		//the same sequence of numbers appearing in different threads
+		Random swingTimes = new Random();
 		//Launch golfers (Allow golfers to enter range)
 		for (int i = 0; i < noGolfers; i++) {
 			//Creating Golfer thread with all necessary parameters
-			Golfer newGolfer = new Golfer(stash,sizeBucket,range,cart,done,teesAvailable,numBucketsPerGolfer,blockGolfers);
+			Golfer newGolfer = new Golfer(stash,sizeBucket,range,cart,done,teesAvailable,numBucketsPerGolfer,blockGolfers,swingTimes);
 
 			//Will sleep for a random amount of time so golfers enter field randomly
 			Thread.sleep(golferEntranceTime.nextInt(3000));

@@ -35,7 +35,7 @@ public class Golfer extends Thread {
 	/*
 	Constructor that sets all instance variables
 	 */
-	public Golfer(BallStash stash,int ballPerB, Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag, Semaphore tees, int numOfBuckets,Semaphore letSwing) {
+	public Golfer(BallStash stash,int ballPerB, Range field, AtomicBoolean cartFlag, AtomicBoolean doneFlag, Semaphore tees, int numOfBuckets,Semaphore letSwing,Random swingTimes) {
 		//Set variables
 		sharedStash = stash; //shared
 		sharedField = field; //shared
@@ -43,7 +43,7 @@ public class Golfer extends Thread {
 		ballsPerBucket = ballPerB; //local
 		done = doneFlag; //shared
 		golferBucket = new golfBall[ballsPerBucket];
-		swingTime = new Random(); //create random number generator
+		swingTime = swingTimes; //shared random number generator
 		myID=newGolfID(); //unique
 		numBallsInBucket = 0; //Initially have 0 balls
 		sharedTees = tees; //shared
@@ -78,7 +78,7 @@ public class Golfer extends Thread {
 		int bucketsUsed = 0;
 
 		//Loop until game is over
-		while (done.get()) {
+		while (done.get() !=true) {
 
 			//Golfer used all of his/her buckets - done golfing
 			if (bucketsUsed > numBucketsPerGolfer){
