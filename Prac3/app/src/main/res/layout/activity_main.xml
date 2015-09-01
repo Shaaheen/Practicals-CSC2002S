@@ -14,22 +14,7 @@
         android:layout_margin="10dp"
         >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:id="@+id/UCT1"
-            android:src="@drawable/small"
-            />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/UCTtext"
-            android:text="UCT 1"
-            android:textSize="25sp"
-            >
-        </TextView>
 
 
     </ViewFlipper>
