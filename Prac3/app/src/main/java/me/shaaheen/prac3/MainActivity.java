@@ -21,6 +21,11 @@ public class MainActivity extends Activity {
             R.drawable.editedct,R.drawable.betterfromfield,R.drawable.editeduct10};
 
 
+
+    public MainActivity(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
