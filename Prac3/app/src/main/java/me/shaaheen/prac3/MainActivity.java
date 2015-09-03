@@ -17,14 +17,9 @@ public class MainActivity extends Activity {
 
     private int keepCount;
 
-    private int[] images = {R.drawable.economics,R.drawable.fitzpatrick,R.drawable.snape,
-            R.drawable.editedct,R.drawable.betterfromfield,R.drawable.editeduct10};
+    //private int[] images = {R.drawable.economics,R.drawable.fitzpatrick,R.drawable.snape,
+    //        R.drawable.editedct,R.drawable.betterfromfield,R.drawable.editeduct10};
 
-
-
-    public MainActivity(){
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +29,7 @@ public class MainActivity extends Activity {
         viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper1);
 
         ImageView testImg = new ImageView(this);
-        testImg.setImageResource(images[keepCount]);
+        //testImg.setImageResource(images[keepCount]);
         testImg.willNotCacheDrawing();
         viewFlipper.addView(testImg);
         viewFlipper.willNotCacheDrawing();
@@ -65,10 +60,10 @@ public class MainActivity extends Activity {
 
                     keepCount--;
 
-                    System.out.println("Here atleast keepCount " + keepCount + "images length " + images.length);
+                    //System.out.println("Here atleast keepCount " + keepCount + "images length " + images.length);
 
                     if (keepCount < 0){
-                        keepCount = images.length - 1;
+                        keepCount = 7 - 1;
                     }
 
                     System.out.println("here keepCount" + keepCount + "  views" + viewFlipper.toString());
@@ -77,7 +72,7 @@ public class MainActivity extends Activity {
                     viewFlipper.refreshDrawableState();
 
                     ImageView newImg = new ImageView(this);
-                    newImg.setImageResource(images[keepCount]);
+                    //newImg.setImageResource(images[keepCount]);
                     newImg.setScaleType(ImageView.ScaleType.FIT_XY);
                     newImg.willNotCacheDrawing();
 
@@ -98,6 +93,7 @@ public class MainActivity extends Activity {
                     keepCount++;
                     System.out.println("Here at least, keepCount " + keepCount);
 
+                    /*
                     if (keepCount >= images.length ){
                         keepCount = 0;
                     }
@@ -115,8 +111,9 @@ public class MainActivity extends Activity {
                     //viewFlipper.setInAnimation(this,R.anim.slide_out_from_right);
                     viewFlipper.showNext();
                     onTrimMemory(60);
-
+                */
                 }
+
                 break;
 
 
