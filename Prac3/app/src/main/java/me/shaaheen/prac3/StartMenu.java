@@ -29,10 +29,10 @@ import java.io.OutputStream;
  */
 public class StartMenu extends Activity{
 
-
-    //Instance variable
+    //Instance variables
     Button welcomeButton; //Button that launches app into view pager mode
     ImageView imageView; //For background image
+    //Array of all the drawables
     static int[] images = new int[]{R.drawable.smallesteco,R.drawable.smallct,R.drawable.smalcsc,R.drawable.smallarts,
                                     R.drawable.finalslide,R.drawable.intro,R.drawable.smallfitz,R.drawable.smallgreenuct,
                                     R.drawable.smalljammie,R.drawable.smallsnape,R.drawable.smallsnapeagain,R.drawable.smalltable,
@@ -77,14 +77,20 @@ public class StartMenu extends Activity{
 
     }
 
+    /*
+        Method to control saving images into storage
+     */
     public void saveImagesIntoMemory() throws IOException {
-        if (checkForMemoryCard()!=null){
+        if (checkForMemoryCard()){
             System.out.println("SD card found again");
             saveFiles();
             System.out.println("Saved images!");
         }
     }
 
+    /*
+        Method to save all images into internal storage
+     */
     public void saveFiles() throws IOException {
         String targetPath = Environment.getExternalStorageDirectory().getAbsolutePath() +  "/DiscoverUCT";
         System.out.println("Target Path is: " + targetPath);
@@ -130,22 +136,16 @@ public class StartMenu extends Activity{
     /*
         Method to check if the user's device has a memory card
      */
-    private String checkForMemoryCard() {
-        String targetPath = "";
-
+    private boolean checkForMemoryCard() {
         // Check for SD Card or internal storage
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             System.out.println("No SD card");
             Toast.makeText(this, "Error! No SDCARD Found!", Toast.LENGTH_LONG).show();
-            //status2.setText("No SD card/internal storage found, default images will be displayed instead");
-            return null;
+            return false;
         }
         else {
             System.out.println("SD card found");
-            //Path to sd Card/internal strorage
-            String externalStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-            targetPath = externalStoragePath + "/DiscoverUCT";
-            return targetPath;
+            return true;
         }
     }
 
