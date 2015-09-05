@@ -6,12 +6,11 @@
     android:background="#f5f5f5"
     tools:context=".MainActivity">
 
-    <ViewSwitcher
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-    </ViewSwitcher>
-
+    <android.support.v4.view.ViewPager
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/viewPager"
+        />
 
     <ViewFlipper
         android:layout_width="wrap_content"

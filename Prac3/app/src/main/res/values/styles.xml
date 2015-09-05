@@ -5,4 +5,18 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="LinearLayout">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:weightSum">1</item>
+    </style>
+
+    <style name="RelativeLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:weightSum">1</item>
+    </style>
+
 </resources>
