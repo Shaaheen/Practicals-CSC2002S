@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Shaaheen on 9/2/2015.
@@ -42,166 +44,40 @@ public class SlideFragment extends android.support.v4.app.Fragment{
         //Grab the main image view of the slide
         ImageView imageView = (ImageView) v.findViewById(R.id.currentSlide);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY); //So slide fills whole screen
-        //Prevents too many picture stored on memory
+        //Prevents too many picture stored on RAM memory
         imageView.destroyDrawingCache();
         imageView.refreshDrawableState();
 
         //Gets directory of where images should have been stored
         appDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() +  "/DiscoverUCT";
 
-        //Set the image and text depending on position given
-        if (getArguments().getString("msg").equals("1")){
-            Bitmap bmp = null;
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            bmp = BitmapFactory.decodeFile(appDirectory + "/TableMnt.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smalltable);
-            }
-            imageView.setImageBitmap(bmp);
-            //imageView.setImageResource(R.drawable.smalltable);
-            textView.setText("View of table mountain from Lower Campus");
-        }
-        else if (getArguments().getString("msg").equals("2")){
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/Jammie.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smalljammie);
-            }
-            imageView.setImageBitmap(bmp);
-            textView.setText("Jameson Hall - The centre of the university");
-        }
-        else if (getArguments().getString("msg").equals("3")){
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/CloseUp.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smallfitz);
-            }
-            imageView.setImageBitmap(bmp);
-            textView.setText("Close-up of a UCT building");
-            textView.setTextColor(Color.WHITE);
-        }
-        else if (getArguments().getString("msg").equals("4")){
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/CSC.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smalcsc);
-            }
-            imageView.setImageBitmap(bmp);
-            textView.setText("Computer Science Senior Labs!");
-        }
-        else if (getArguments().getString("msg").equals("5")){
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/CT.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smallct);
-            }
-            imageView.setImageBitmap(bmp);
-            textView.setText("The city you would be living in :)");
-            textView.setTextColor(Color.WHITE);
+        //Get list of images
+        ArrayList<SlideShowImage> slideShowImages = StartMenu.getSlideShowImages();
 
+        //Gets index of chosen picture and gets that image from the list of images
+        int currPicIndx = Integer.parseInt(getArguments().getString("msg"));
+        SlideShowImage currSlideImage = slideShowImages.get(currPicIndx);
+
+        Bitmap bmp = null;
+        System.out.println("Here - Trying to load from internal memory...");
+
+        //Create bitmap from the image saved in the internal storage
+        bmp = BitmapFactory.decodeFile(appDirectory + "/" + currSlideImage.getFileName());
+
+        //If fails to load image from internal storage then load from drawables
+        if (bmp == null){
+            System.out.println("Failed --- Loading image from drawable ");
+            //Gets bitmap from drawables
+            bmp = BitmapFactory.decodeResource(getResources(),currSlideImage.getDrawablePath());
         }
-        else if (getArguments().getString("msg").equals("6")){
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/Lower.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smalltuggies);
-            }
-            imageView.setImageBitmap(bmp);
-            textView.setText("Night view of lower campus");
-            textView.setTextColor(Color.WHITE);
-        }
-        else if (getArguments().getString("msg").equals("7")){
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/GreenUCT.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smallgreenuct);
-            }
-            imageView.setImageBitmap(bmp);
-            textView.setText("Upper campus when its blooming");
-            textView.setTextColor(Color.WHITE);
-        }
-        else if (getArguments().getString("msg").equals("8")){
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/Arts.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smallarts);
-            }
-            imageView.setImageBitmap(bmp);
-            textView.setText("The UCT Arts building ");
-            textView.setTextColor(Color.WHITE);
-        }
-        else if (getArguments().getString("msg").equals("9")){
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/Snape.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smallsnape);
-            }
-            imageView.setImageBitmap(bmp);
-            textView.setText("The new High Tech Engineering building");
-            textView.setTextColor(Color.WHITE);
-        }
-        else if (getArguments().getString("msg").equals("10")){
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/Snape2.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smallsnapeagain);
-            }
-            imageView.setImageBitmap(bmp);
-            textView.setText("Another view from inside the engineeing building");
-            textView.setTextColor(Color.WHITE);
-        }
-        else if (getArguments().getString("msg").equals("11")){
-            //Create bitmap from the image saved in the internal storage
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/FinalSlide.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.finalslide);
-            }
-            imageView.setImageBitmap(bmp);
-            //textView.setText("Applications open!");
-        }
-        else{
-            System.out.println("Here - Trying to load from internal memory...");
-            Bitmap bmp = BitmapFactory.decodeFile(appDirectory + "/Eco.jpeg");
-            //If fails to load image from internal storage then
-            if (bmp == null){
-                System.out.println("Failed --- Loading image from drawable ");
-                bmp = BitmapFactory.decodeResource(getResources(),R.drawable.smallesteco);
-            }
-            imageView.setImageBitmap(bmp);
-            textView.setText("Passage way past the Economics building..");
+        //Change the imageView to display new picture
+        imageView.setImageBitmap(bmp);
+        //Sets the text on screen to the description of the image
+        textView.setText(currSlideImage.getDescription());
+        //Change font size of text
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        //Changes color of text depending on what image requires
+        if (currSlideImage.white()){
             textView.setTextColor(Color.WHITE);
         }
         return v;
@@ -212,6 +88,7 @@ public class SlideFragment extends android.support.v4.app.Fragment{
      */
     public static SlideFragment newInstance(int position) {
 
+        //New Slide
         SlideFragment f = new SlideFragment();
 
         //For bundle that will be passed to slide

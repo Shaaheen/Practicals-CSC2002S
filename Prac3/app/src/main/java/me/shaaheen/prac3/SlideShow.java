@@ -44,8 +44,8 @@ public class SlideShow extends FragmentActivity{
 
         //Gets all these objects from the XML to add functionality
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        Button nextButton = (Button) findViewById(R.id.nextButton);
-        Button prevButton = (Button) findViewById(R.id.previousButton);
+        final Button nextButton = (Button) findViewById(R.id.nextButton);
+        final Button prevButton = (Button) findViewById(R.id.previousButton);
         Button backButton = (Button) findViewById(R.id.backButton);
         slideshowButton = (Button) findViewById(R.id.start);
 
@@ -58,6 +58,8 @@ public class SlideShow extends FragmentActivity{
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                prevButton.setText("Previous");
+                nextButton.setText("Next >");
                 //Make view pager change to next slide
                 viewPager.setCurrentItem(getItem(+1), true);
             }
@@ -67,6 +69,8 @@ public class SlideShow extends FragmentActivity{
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                prevButton.setText("< Previous");
+                nextButton.setText("Next");
                 //Make view pager change to the previous slide
                 viewPager.setCurrentItem(getItem(-1), true);
             }
@@ -194,7 +198,7 @@ public class SlideShow extends FragmentActivity{
          */
         @Override
         public int getCount() {
-            return 12;
+            return 17;
         }
     }
 }
