@@ -132,7 +132,7 @@ public class SlideShow extends FragmentActivity{
             //Get the current position of the slideshow
             slideshowPosition = getItem(1);
             //Increment the position by 1 - i.e Move to next position
-            if( slideshowPosition >= 12){
+            if( slideshowPosition >= 25){
                 slideshowPosition = 0;
             }
             //Make view pager go onto next slide
@@ -198,7 +198,7 @@ public class SlideShow extends FragmentActivity{
          */
         @Override
         public int getCount() {
-            return 17;
+            return 25;
         }
     }
 }

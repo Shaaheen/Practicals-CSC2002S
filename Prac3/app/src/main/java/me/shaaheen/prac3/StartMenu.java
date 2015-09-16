@@ -76,7 +76,7 @@ public class StartMenu extends Activity{
                     e.printStackTrace();
                 }
                 //Create a new intent with the intention of switching classes/views
-                Intent intent = new Intent(StartMenu.this,SlideShow.class);
+                Intent intent = new Intent(StartMenu.this, SlideShow.class);
                 startActivity(intent); //Switch to SlideShow class
                 finish(); //End current class appriopiately
             }
@@ -89,23 +89,35 @@ public class StartMenu extends Activity{
         This is stored in an array for the use of the program
      */
     public ArrayList<SlideShowImage> loadImages(ArrayList<SlideShowImage> slideImages){
+        //Education images
+        slideImages.add(new SlideShowImage("Education.jpeg",R.drawable.smalleducation,"",true));
+        slideImages.add(new SlideShowImage("Class1.jpeg",R.drawable.smalllearn,"Classic UCT Lecture Theatre",true));
+        slideImages.add(new SlideShowImage("Class2.jpeg",R.drawable.smallclass,"Another Awesome Classroom!",true));
+        slideImages.add(new SlideShowImage("CSC.jpeg",R.drawable.smalcsc,"Computer Science Senior Labs!",true));
+
+        //Faculty Images
+        slideImages.add(new SlideShowImage("Faculty.jpeg",R.drawable.smallfaculty,"",false));
+        slideImages.add(new SlideShowImage("Humanities.jpeg",R.drawable.smallactualhuman,"Humanities Building",true));
+        slideImages.add(new SlideShowImage("MedSchool.jpeg",R.drawable.smallhuman,"UCT Medical School",true));
+        slideImages.add(new SlideShowImage("Leslie.jpeg",R.drawable.smallleslie,"Commerce Building!",true));
+        slideImages.add(new SlideShowImage("Snape.jpeg",R.drawable.smallsnape,"The new High Tech Engineering building",true));
+        slideImages.add(new SlideShowImage("Snape2.jpeg", R.drawable.smallsnapeagain, "Another view from inside the engineeing building", true));
+
+        //UCT Images
+        slideImages.add(new SlideShowImage("UCTImages.jpeg",R.drawable.smallenjoy,"",false));
         slideImages.add(new SlideShowImage("Eco.jpeg",R.drawable.smallesteco,"Passage way past the Economics building..",true));
         slideImages.add(new SlideShowImage("TableMnt.jpeg", R.drawable.smalltable, "View of table mountain from Lower Campus", false));
         slideImages.add(new SlideShowImage("Jammie.jpeg", R.drawable.smalljammie, "Jameson Hall - The centre of the university", false));
         slideImages.add(new SlideShowImage("CloseUp.jpeg",R.drawable.smallfitz,"Close-up of a UCT building",true));
-        slideImages.add(new SlideShowImage("CSC.jpeg",R.drawable.smalcsc,"Computer Science Senior Labs!",false));
         slideImages.add(new SlideShowImage("CT.jpeg",R.drawable.smallct,"The city you would be living in :)",true));
         slideImages.add(new SlideShowImage("Lower.jpeg", R.drawable.smalltuggies, "Night view of lower campus", true));
         slideImages.add(new SlideShowImage("GreenUCT.jpeg", R.drawable.smallgreenuct, "Upper campus when its blooming", true));
         slideImages.add(new SlideShowImage("Arts.jpeg",R.drawable.smallarts,"The UCT Arts building ",true));
-        slideImages.add(new SlideShowImage("Snape.jpeg",R.drawable.smallsnape,"The new High Tech Engineering building",true));
-        slideImages.add(new SlideShowImage("Snape2.jpeg", R.drawable.smallsnapeagain, "Another view from inside the engineeing building", true));
         slideImages.add(new SlideShowImage("PinkBuilding.jpeg",R.drawable.smallbuilding,"Beauty of the Botany Building",true));
         slideImages.add(new SlideShowImage("Pathway.jpeg",R.drawable.smalloutagain,"Pathways through UCT",true));
         slideImages.add(new SlideShowImage("Smuts.jpeg",R.drawable.smalloutside,"View of Smuts",true));
         slideImages.add(new SlideShowImage("Fountain.jpeg",R.drawable.smallfountain,"Centre Fountain of UCT",true));
         slideImages.add(new SlideShowImage("LowerCampus.jpeg",R.drawable.smallreslower,"Lower campus residence",true));
-
         slideImages.add(new SlideShowImage("FinalSlide.jpeg", R.drawable.finalslide, "", true));
         return slideImages;
 
